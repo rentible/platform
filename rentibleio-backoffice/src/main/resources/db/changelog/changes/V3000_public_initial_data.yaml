@@ -1,0 +1,268 @@
+databaseChangeLog:
+- preConditions:
+  - runningAs:
+      username: postgres
+
+- changeSet:
+    id: Default [user] data
+    author: Máté Simon
+    changes:
+    - sql:
+      sql: INSERT INTO public.user (username, email, password, google_auth, enabled, created_on, modified_on) VALUES ('user', 'user@example.com', '$2a$11$YKoOGDayQ7Sl.qXhexpkTu1EpmpXDRlbQYsjLMRLp8U06t4cenOEe', false, true, NOW(), NOW())
+    - sql:
+      sql: INSERT INTO public.user (username, email, password, google_auth, enabled, created_on, modified_on) VALUES ('user2', 'user2@example.com', '$2a$11$YKoOGDayQ7Sl.qXhexpkTu1EpmpXDRlbQYsjLMRLp8U06t4cenOEe', false, true, NOW(), NOW())
+
+- changeSet:
+    id: Default [email_template] data
+    author: Máté Simon
+    changes:
+    - sql:
+      sql: INSERT INTO public.email_template (templ_code, content, enabled, subject, created_by, created_on, modified_by) VALUES (500, '<p>Dear $recipient!</p><p><br></p><p>Your account has been created.</p>From now on, please log in to your account using your email and your password.</p><p><br></p><p><strong>Best regards,</strong></p><p>$appname</p>', TRUE, 'Flatshares account created', 1, NOW(), 1)
+    - sql:
+      sql: INSERT INTO public.email_template (templ_code, content, enabled, subject, created_by, created_on, modified_by) VALUES (502, '<p>Dear $recipient!</p><p>&nbsp;</p><p>Your Flatshares account has been created.</p><p>To activate your account click <a href=$url>here</a>.<p>&nbsp;</p><p><strong>Best regards,</strong></p><p>$appname</p>', TRUE, 'Verify your Flatshares account', 1, NOW(), 1)
+    - sql:
+      sql: INSERT INTO public.email_template (templ_code, content, enabled, subject, created_by, created_on, modified_by) VALUES (504, '<p>Dear $recipient!</p><p>&nbsp;</p><p>Your Flatshares account has been deleted.</p><strong>Best regards,</strong></p><p>$appname</p>', TRUE, 'Removed Flatshares account', 1, NOW(), 1)
+
+- changeSet:
+    id: Default [role] data
+    author: Tivadar Bocz
+    changes:
+    - sql:
+      sql: INSERT INTO public.role (id, name) VALUES (100, 'crypto')
+    - sql:
+      sql: INSERT INTO public.role (id, name) VALUES (101, 'lodger')
+    - sql:
+      sql: INSERT INTO public.role (id, name) VALUES (102, 'land_lord')
+    - sql:
+      sql: INSERT INTO public.role (id, name) VALUES (103, 'site_admin')
+    - sql:
+      sql: INSERT INTO public.role (id, name) VALUES (104, 'admin')
+    - sql:
+      sql: INSERT INTO public.role (id, name) VALUES (111, 'unactivated_lodger')
+    - sql:
+      sql: INSERT INTO public.role (id, name) VALUES (121, 'facebook_user')
+
+- changeSet:
+    id: Default [user_x_role] data
+    author: Máté Simon
+    changes:
+    - sql:
+      sql: INSERT INTO public.user_x_role (user_id, role_id) VALUES (1, 104)
+    - sql:
+      sql: INSERT INTO public.user_x_role (user_id, role_id) VALUES (1, 102)
+    - sql:
+      sql: INSERT INTO public.user_x_role (user_id, role_id) VALUES (2, 104)
+    - sql:
+      sql: INSERT INTO public.user_x_role (user_id, role_id) VALUES (2, 102)
+
+- changeSet:
+    id: Default [file_descriptor] data
+    author: Tivadar Bocz
+    changes:
+    - sql:
+      sql: INSERT INTO public.file_descriptor (original_name, file_path, created_by, created_on, modified_by) VALUES ('no-image.jpg', 'no-image.jpg', 1, NOW(), 1)
+    - sql:
+      sql: INSERT INTO public.file_descriptor (original_name, file_path, created_by, created_on, modified_by) VALUES ('property1.jpg', 'property1.jpg', 1, NOW(), 1)
+
+#code types
+- changeSet:
+    id: Default [code_store_type] data
+    author: Tivadar Bocz
+    changes:
+    - sql:
+      sql: INSERT INTO public.code_store_type (caption, enabled, created_by, created_on, modified_by, modified_on) VALUES ('rental type', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_type (caption, enabled, created_by, created_on, modified_by, modified_on) VALUES ('property type', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_type (caption, enabled, created_by, created_on, modified_by, modified_on) VALUES ('view type', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_type (caption, enabled, created_by, created_on, modified_by, modified_on) VALUES ('heating type', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_type (caption, enabled, created_by, created_on, modified_by, modified_on) VALUES ('building condition', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_type (caption, enabled, created_by, created_on, modified_by, modified_on) VALUES ('currency', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_type (caption, enabled, created_by, created_on, modified_by, modified_on) VALUES ('schema', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_type (caption, enabled, created_by, created_on, modified_by, modified_on) VALUES ('term of lease', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_type (caption, enabled, created_by, created_on, modified_by, modified_on) VALUES ('floor', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_type (caption, enabled, created_by, created_on, modified_by, modified_on) VALUES ('occupation', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_type (caption, enabled, created_by, created_on, modified_by, modified_on) VALUES ('gender', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_type (caption, enabled, created_by, created_on, modified_by, modified_on) VALUES ('social media provider type', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_type (caption, enabled, created_by, created_on, modified_by, modified_on) VALUES ('number of rooms', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_type (caption, enabled, created_by, created_on, modified_by, modified_on) VALUES ('languages', true, 1, NOW(), 1, NOW())
+
+#code items
+- changeSet:
+    id: Default [code_store_item] data
+    author: Tivadar Bocz
+    changes:
+
+    #rental type
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (100, 1, '{"en":"Apartment","hu":"Lakás"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (101, 1, '{"en":"Room","hu":"Szoba"}', true, 1, NOW(), 1, NOW())
+
+    #property type TODO caption naming
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (200, 2, '{"en":"property type1","hu":"property type1"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (201, 2, '{"en":"property type2","hu":"property type2"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (202, 2, '{"en":"property type3","hu":"property type3"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (203, 2, '{"en":"property type4","hu":"property type4"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (204, 2, '{"en":"property type5","hu":"property type5"}', true, 1, NOW(), 1, NOW())
+
+    #view TODO caption naming
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (300, 3, '{"en":"view type1","hu":"view type1"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (301, 3, '{"en":"view type2","hu":"view type2"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (302, 3, '{"en":"view type3","hu":"view type3"}', true, 1, NOW(), 1, NOW())
+
+    #heating TODO caption naming
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (400, 4, '{"en":"heating type1","hu":"heating type1"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (401, 4, '{"en":"heating type2","hu":"heating type2"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (402, 4, '{"en":"heating type3","hu":"heating type3"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (403, 4, '{"en":"heating type4","hu":"heating type4"}', true, 1, NOW(), 1, NOW())
+
+    #building condition TODO caption naming
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (500, 5, '{"en":"building condition1","hu":"building condition1"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (501, 5, '{"en":"building condition2","hu":"building condition2"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (502, 5, '{"en":"building condition3","hu":"building condition3"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (503, 5, '{"en":"building condition4","hu":"building condition4"}', true, 1, NOW(), 1, NOW())
+
+    #currency TODO caption naming
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (600, 6, '{"en":"EUR"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (601, 6, '{"en":"HUF"}', true, 1, NOW(), 1, NOW())
+
+    #schema
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (700, 7, '{"en":"cms_hun"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (701, 7, '{"en":"cms_gbr"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (702, 7, '{"en":"cms_chn"}', false, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (703, 7, '{"en":"cms_nl"}', true, 1, NOW(), 1, NOW())
+
+    #term of lease
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (800, 8, '{"en":"12+ months","hu":"12+ months"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (801, 8, '{"en":"6+ months","hu":"6+ months"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (802, 8, '{"en":"Academic semester","hu":"Academic semester"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (803, 8, '{"en":"daily/weekly","hu":"daily/weekly"}', true, 1, NOW(), 1, NOW())
+
+    #floor
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (900, 9, '{"en":"Ground floor","hu":"Ground floor"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (901, 9, '{"en":"Mezzanine","hu":"Mezzanine"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (902, 9, '{"en":"1st floor","hu":"1st floor"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (903, 9, '{"en":"2nd floor","hu":"2nd floor"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (904, 9, '{"en":"3rd floor and up","hu":"3rd floor and up"}', true, 1, NOW(), 1, NOW())
+
+    #occupation
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1000, 10, '{"en":"Student","hu":"Tanuló"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1001, 10, '{"en":"Expat","hu":"Expat"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1002, 10, '{"en":"Prossional","hu":"Prossional"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1003, 10, '{"en":"Other","hu":"Egyéb"}', true, 1, NOW(), 1, NOW())
+
+    #gender
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1100, 11, '{"en":"Female","hu":"Nő"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1101, 11, '{"en":"Male","hu":"Male"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1102, 11, '{"en":"Unknown","hu":"Egyéb"}', true, 1, NOW(), 1, NOW())
+
+
+    #social media provider types
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1200, 12, '{"en":"Facebook"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1201, 12, '{"en":"Google"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1202, 12, '{"en":"Instagram"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1203, 12, '{"en":"Twitter"}', true, 1, NOW(), 1, NOW())
+
+    #number of rooms types
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1300, 13, '{"en":"1"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1301, 13, '{"en":"2"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1302, 13, '{"en":"3"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1303, 13, '{"en":"1,5"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1304, 13, '{"en":"2,5"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1305, 13, '{"en":"1+2"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1306, 13, '{"en":"2+1"}', true, 1, NOW(), 1, NOW())
+
+    #languages types
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1400, 14, '{"en":"English"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1401, 14, '{"en":"German"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1402, 14, '{"en":"Russian"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1403, 14, '{"en":"Slovak"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1404, 14, '{"en":"Hungarian"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1405, 14, '{"en":"Chinese"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1406, 14, '{"en":"Spanish"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1407, 14, '{"en":"Italian"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1408, 14, '{"en":"Persian"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1409, 14, '{"en":"French"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1410, 14, '{"en":"Arabic"}', true, 1, NOW(), 1, NOW())
+    - sql:
+      sql: INSERT INTO public.code_store_item (id, code_store_type_id, caption, enabled, created_by, created_on, modified_by, modified_on) VALUES (1411, 14, '{"en":"Other"}', true, 1, NOW(), 1, NOW())
+
+- changeSet:
+    id: Default schema id [user] data
+    author: Tivadar Bocz
+    changes:
+    - sql:
+      sql: UPDATE public.user SET schema_id=700 WHERE id  < 3
+

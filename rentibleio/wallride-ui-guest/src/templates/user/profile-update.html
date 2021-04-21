@@ -1,0 +1,157 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description"/>
+    <meta name="keywords"/>
+    <meta name="author" content=""/>
+    <title>Profile</title>
+    <!--/*/ <th:block th:replace="layout::head-link"> /*/-->
+    <link rel="alternate" type="application/atom+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/atom.xml}"/>
+    <link rel="alternate" type="application/rss+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/rss.xml}"/>
+    <link rel="stylesheet" th:href="@{/resources/bundle.css}" href="/resources/guest/bundle.css"/>
+    <script th:src="@{//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js}"
+            src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <!--/*/ </th:block> /*/-->
+    <!--/*/ <th:block th:replace="layout::head-script"> /*/-->
+    <script th:src="@{/resources/bundle.js}" src="/resources/guest/bundle.js"></script>
+    <!--/*/ </th:block> /*/-->
+    <script th:replace="google-analytics::ga(null)"></script>
+</head>
+<body>
+<div id="wrap">
+    <div th:replace="layout::nav"></div>
+    <div th:replace="layout::postAd"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 l-5-vw r-5-vw">
+                <div class="alert alert-success" th:if="${updatedUser ne null}">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <span th:text="#{SavedProfile}">Profile saved.</span>
+                </div>
+                <div class="col-sm-3 min-height-95vh">
+                    <img th:src="${profilePicturePath}"
+                         class="profile-img height-200">
+                    <div th:replace="layout::profile"></div>
+                </div>
+
+                <div class="col-sm-8 col-sm-offset-1 mt-10">
+                    <div class="profile-edit-title">
+                        <h3 th:text="#{PersonalData}"></h3>
+                    </div>
+                    <hr>
+                </div>
+
+                <form th:action="@{/settings/profile}" th:object="${form}" method="post" role="form">
+                    <input type="hidden" name="_method" value="put"/>
+                    <p class="alert alert-danger mt-150" th:if="${#fields.hasErrors('all')}"
+                       th:text="#{Error}">Error</p>
+                    <div class="col-sm-4 col-sm-offset-1">
+                        <div class="form-group" th:classappend="${#fields.hasErrors('firstName')}? has-error">
+                            <label class="control-label" th:text="#{FirstName}">FirstName</label>
+                            <input type="text" th:field="*{firstName}" placeholder="First Name"
+                                   th:attr="placeholder=#{FirstName}" class="custom-input col-sm-12"/>
+                        </div>
+                        <div class="form-group" th:classappend="${#fields.hasErrors('lastName')}? has-error">
+                            <label class="control-label m-t-15" th:text="#{LastName}">LastName</label>
+                            <input type="text" th:field="*{lastName}" placeholder="First Name"
+                                   th:attr="placeholder=#{LastName}" class="custom-input col-sm-12"/>
+                        </div>
+                        <div class="form-group" th:classappend="${#fields.hasErrors('gender')}? has-error">
+                            <p class="col-sm-12 mt-10 mb--10 f-w-600"
+                               th:text="#{Gender}"></p>
+                            <div th:each="gender : ${genders}"
+                                 class="col-sm-6 input-container d-flex">
+                                <input type="radio" th:id="${gender.caption}" th:field="*{gender}"
+                                       th:value="${gender.id}"/>
+                                <label class="px-10 py-5" th:for="${gender.caption}"
+                                       th:text="${gender.caption}"></label>
+                            </div>
+                        </div>
+                        <div class="top-space profile-settings-hobbies"
+                             th:classappend="${#fields.hasErrors('hobbies')}? has-error">
+                            <div>
+                                <span class="flatshares-font" th:text="#{Hobbies}"></span>
+                                <span class="not-null flatshares-font" th:text="'*'"></span>
+                            </div>
+                            <div class="col-sm-6 input-container" th:each="hobby : ${hobbies}">
+                                <input type="checkbox" th:id="${hobby.caption}" th:field="*{hobbies}"
+                                       th:value="${hobby.id}"/>
+                                <label th:for="${hobby.caption}" th:text="${hobby.caption}"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group" th:classappend="${#fields.hasErrors('phoneNumber')}? has-error">
+                            <label class="control-label" th:text="#{Phone}"></label>
+                            <div>
+                                <input type="text" th:field="*{phoneNumber}" placeholder="Last Name"
+                                       th:attr="placeholder=#{Phone}" class="custom-input col-sm-12"/>
+                            </div>
+                        </div>
+                        <div class="form-group" th:classappend="${#fields.hasErrors('dateOfBirth')}? has-error">
+                            <label class="control-label m-t-15" th:text="#{DateOfBirth}"></label>
+                            <div>
+                                <input th:field="*{dateOfBirth}" class="custom-input col-sm-12" type="date"/>
+                            </div>
+                        </div>
+                        <div class="form-group" th:classappend="${#fields.hasErrors('email')}? has-error">
+                            <label class="control-label m-t-15" th:text="#{Email}">E-mail</label>
+                            <div>
+                                <input type="text" th:field="*{email}" class="custom-input col-sm-12"
+                                       th:attr="placeholder=#{Email}" autocomplete="off"/>
+                            </div>
+                        </div>
+                        <div class="form-group" th:classappend="${#fields.hasErrors('occupation')}? has-error">
+                            <label class="control-label m-t-15" th:text="#{Occupation}"></label>
+                            <div>
+                                <select th:field="*{occupation}" class="custom-input col-sm-12">
+                                    <option value="0" th:text="#{Occupation}"></option>
+                                    <option th:each="occupation : ${occupations}" th:value="${occupation.id}"
+                                            th:text="${occupation.caption}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 top-space" th:classappend="${#fields.hasErrors('languages')}? has-error">
+                            <div>
+                                <span class="flatshares-font" th:text="#{Languages}"></span>
+                                <span class="not-null flatshares-font" th:text="'*'"></span>
+                            </div>
+                            <div class="col-sm-6 input-container" th:each="language : ${languages}">
+                                <input type="checkbox" th:id="${language.caption}" th:field="*{languages}"
+                                       th:value="${language.id}"/>
+                                <label th:for="${language.caption}" th:text="${language.caption}"></label>
+                            </div>
+                        </div>
+                        <button id="btnSave"
+                                class="default-flatshares-btn col-sm-11 m-t-15"><span th:text="#{Save}">Save</span>
+                        </button>
+                    </div>
+
+                </form>
+                <form th:action="@{/settings/profile/image}" class="col-sm-12 text-align-center float-initial"
+                      method="post"
+                      role="form"
+                      enctype="multipart/form-data">
+                    <div id="photo" class="col-sm-4 col-sm-offset-1 photos-box">
+                        <div class="upload-photos-header" th:text="#{UploadProfilePicture}"></div>
+                        <label style="cursor: pointer;" class="upload-photos-body width-95">
+                            <i class="fas fa-plus fa-5x mt-100"></i>
+                            <input type="file" name="file" id="file" style="display: none;">
+                        </label>
+                        <input type="hidden" name="_method" value="put"/>
+                        <div class="upload-photos-footer">
+                            <div>
+                                <button><span th:text="#{Upload}"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

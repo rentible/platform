@@ -1,0 +1,570 @@
+databaseChangeLog:
+- preConditions:
+  - runningAs:
+      username: postgres
+
+- changeSet:
+    id: Create [user_detail] Table
+    author: Tivadar Bocz
+    changes:
+    - createTable:
+        tableName: user_detail
+        schemaName: cms_hun
+        columns:
+        - column:
+            name: id
+            type: int
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              nullable: false
+        - column:
+            name: user_id
+            type: int
+        - column:
+            name: first_name
+            type: varchar(64)
+        - column:
+            name: last_name
+            type: varchar(50)
+        - column:
+            name: date_of_birth
+            type: timestamp
+        - column:
+            name: profile_image
+            type: int
+        - column:
+            name: gender
+            type: int #TODO fk
+        - column:
+            name: phone_number
+            type: varchar(20)
+        - column:
+            name: normal_credit
+            type: int
+        - column:
+            name: fb_credit
+            type: int
+        - column:
+            name: lift_up_expire
+            type: timestamp
+        - column:
+            name: show_logo_expire
+            type: timestamp
+        - column:
+            name: show_url_expire
+            type: timestamp
+        - column:
+            name: fb_id
+            type: varchar(50)
+        - column:
+            name: mail_smart
+            type: int(3)
+        - column:
+            name: mail_message
+            type: int(3)
+        - column:
+            name: mail_interest
+            type: int(3)
+        - column:
+            name: mail_news
+            type: int(3)
+        - column:
+            name: email_approved_on
+            type: timestamp
+        - column:
+            name: avatar
+            type: varchar(32)
+        - column:
+            name: admin_verified
+            type: boolean
+        - column:
+            name: ban_note
+            type: text
+        - column:
+            name: original_id
+            type: int
+        - column:
+            name: hobbies
+            type: text
+        - column:
+            name: occupation_id
+            type: int
+
+- changeSet:
+      id: Create [property] Table
+      author: Tivadar Bocz
+      changes:
+      - createTable:
+            tableName: property
+            schemaName: cms_hun
+            columns:
+            - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                      primaryKey: true
+            - column:
+                  name: ad_id
+                  type: int #TODO fk
+            - column:
+                  name: rental_type
+                  type: int
+            - column:
+                  name: cross_street1
+                  type: varchar
+            - column:
+                  name: cross_street2
+                  type: varchar
+            - column:
+                  name: property_type
+                  type: int
+            - column:
+                  name: reference_id
+                  type: varchar(30)
+            - column:
+                  name: rent_price
+                  type: decimal
+            - column:
+                  name: rent_price_currency
+                  type: int
+            - column:
+                  name: deposit
+                  type: varchar(10)
+            - column:
+                  name: deposit_currency
+                  type: int
+            - column:
+                  name: apartment_size
+                  type: int
+            - column:
+                  name: room_size
+                  type: varchar(10)
+                  remarks: Use only if rental_type equals to room
+            - column:
+                  name: bedroom
+                  type: int
+            - column:
+                  name: room
+                  type: int
+            - column:
+                  name: bathroom
+                  type: varchar(10)
+            - column:
+                  name: toilet
+                  type: integer
+            - column:
+                  name: furnished
+                  type: boolean
+            - column:
+                  name: termoflease
+                  type: integer
+            - column:
+                  name: available_from
+                  type: timestamp
+            - column:
+                  name: apartment_condition
+                  type: int
+            - column:
+                  name: view
+                  type: int
+            - column:
+                  name: floor
+                  type: int
+            - column:
+                  name: heating
+                  type: int
+            - column:
+                  name: building_condition
+                  type: int
+            - column:
+                  name: year_built
+                  type: int
+            - column:
+                  name: common_cost
+                  type: decimal
+            - column:
+                  name: heating_included
+                  type: boolean
+            - column:
+                  name: near_to_metro
+                  type: varchar(13)
+            - column:
+                  name: distance_to_public_transport
+                  type: int
+            - column:
+                  name: surrounding
+                  type: varchar(13)
+            - column:
+                  name: amenity
+                  type: varchar(7)
+            - column:
+                  name: elevator
+                  type: boolean
+            - column:
+                  name: location_lat
+                  type: real
+            - column:
+                  name: location_lng
+                  type: real
+            - column:
+                  name: address_id
+                  type: int
+            - column:
+                  name: title
+                  type: varchar(255)
+            - column:
+                  name: main_image
+                  type: int
+            - column:
+                  name: description
+                  type: text
+            - column:
+                  name: enabled
+                  type: boolean
+            - column:
+                name: user_id
+                type: int
+            - column:
+                name: type
+                type: int
+            - column:
+                name: flatmates_number
+                type: int
+            - column:
+                name: smoking_allowed
+                type: boolean
+            - column:
+                name: original_id
+                type: int
+            - column:
+                name: created_on
+                type: timestamp
+            - column:
+                  name: created_by
+                  type: int
+            - column:
+                  name: modified_on
+                  type: timestamp
+            - column:
+                  name: modified_by
+                  type: int
+
+
+- changeSet:
+      id: Create [address] Table
+      author: Máté Simon
+      changes:
+      - createTable:
+            tableName: address
+            schemaName: cms_hun
+            columns:
+            - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                      primaryKey: true
+            - column:
+                  name: address1
+                  type: varchar(255)
+            - column:
+                  name: address2
+                  type: varchar(255)
+            - column:
+                  name: address3
+                  type: varchar(255)
+            - column:
+                  name: city
+                  type: varchar(127)
+            - column:
+                  name: zip
+                  type: varchar(32)
+            - column:
+                  name: country
+                  type: varchar(127)
+            - column:
+                  name: enabled
+                  type: boolean
+            - column:
+                  name: created_on
+                  type: timestamp
+            - column:
+                  name: created_by
+                  type: int
+            - column:
+                  name: modified_on
+                  type: timestamp
+            - column:
+                  name: modified_by
+                  type: int
+            - column:
+                  name: property_id
+                  type: int
+
+- changeSet:
+    id: Create [message] Table
+    author: Tivadar Bocz
+    changes:
+    - createTable:
+        tableName: message
+        schemaName: cms_hun
+        columns:
+        - column:
+            name: id
+            type: int
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+        - column:
+            name: sender_user_id
+            type: int
+            constraints:
+              nullable: false
+        - column:
+            name: recipient_user_id
+            type: int
+            constraints:
+              nullable: false
+        - column:
+            name: content
+            type: text #todo
+            constraints:
+              nullable: false
+        - column:
+            name: content_type
+            type: varchar(50)
+        - column:
+            name: seen
+            type: boolean
+        - column:
+            name: archive
+            type: boolean
+        - column:
+            name: created_on
+            type: timestamp
+            constraints:
+              nullable: false
+        - column:
+            name: created_by
+            type: int
+            constraints:
+              nullable: false
+        - column:
+            name: modified_on
+            type: timestamp
+        - column:
+            name: modified_by
+            type: int
+
+- changeSet:
+    id: Create [property_x_file_descriptor] Table
+    author: Tivadar Bocz
+    changes:
+    - createTable:
+        tableName: property_x_file_descriptor
+        schemaName: cms_hun
+        columns:
+        - column:
+            name: id
+            type: int
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+        - column:
+            name: property_id
+            type: int
+        - column:
+            name: file_descriptor_id
+            type: int
+
+- changeSet:
+    id: Create [room_ad] Table
+    author: Máté Simon
+    changes:
+    - createTable:
+        tableName: room_ad
+        schemaName: cms_hun
+        columns:
+        - column:
+            name: id
+            type: int
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+        - column:
+            name: property_id
+            type: int
+        - column:
+            name: enabled
+            type: boolean
+        - column:
+            name: created_on
+            type: timestamp
+            constraints:
+              nullable: false
+        - column:
+            name: created_by
+            type: int
+            constraints:
+              nullable: false
+        - column:
+            name: modified_on
+            type: timestamp
+            constraints:
+              nullable: false
+        - column:
+            name: modified_by
+            type: int
+            constraints:
+              nullable: false
+
+- changeSet:
+    id: Create [flatmate_ad] Table
+    author: Máté Simon
+    changes:
+    - createTable:
+        tableName: flatmate_ad
+        schemaName: cms_hun
+        columns:
+        - column:
+            name: id
+            type: int
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+        - column:
+            name: user_id
+            type: int
+        - column:
+            name: title
+            type: varchar(255)
+        - column:
+            name: description
+            type: text
+        - column:
+            name: budget
+            type: int
+        - column:
+            name: currency
+            type: int
+        - column:
+            name: area
+            type: varchar(255)
+        - column:
+            name: move_in_from
+            type: timestamp
+        - column:
+            name: term_of_lease
+            type: int
+        - column:
+            name: smoking_allowed
+            type: boolean
+        - column:
+            name: enabled
+            type: boolean
+        - column:
+            name: created_on
+            type: timestamp
+            constraints:
+              nullable: false
+        - column:
+            name: created_by
+            type: int
+            constraints:
+              nullable: false
+        - column:
+            name: modified_on
+            type: timestamp
+            constraints:
+              nullable: false
+        - column:
+            name: modified_by
+            type: int
+            constraints:
+              nullable: false
+
+- changeSet:
+    id: Create [flatmate_ad_language_x_code_store_item] Table
+    author: Máté Simon
+    changes:
+    - createTable:
+        tableName: flatmate_ad_language_x_code_store_item
+        schemaName: cms_hun
+        columns:
+        - column:
+            name: id
+            type: int
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+        - column:
+            name: code_store_item_id
+            type: int
+        - column:
+            name: flatmate_ad_id
+            type: int
+
+- changeSet:
+    id: Create [user_detail_x_language] Table
+    author: Máté Simon
+    changes:
+    - createTable:
+        tableName: user_detail_x_language
+        schemaName: cms_hun
+        columns:
+        - column:
+            name: id
+            type: int
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+        - column:
+            name: code_store_item_id
+            type: int
+        - column:
+            name: user_detail_id
+            type: int
+
+- changeSet:
+    id: Create [rent_period_x_property] Table
+    author: Máté Simon
+    changes:
+    - createTable:
+        tableName: rent_period_x_property
+        schemaName: cms_hun
+        columns:
+        - column:
+            name: id
+            type: int
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+        - column:
+            name: code_store_item_id
+            type: int
+        - column:
+            name: property_id
+            type: int
+
+- changeSet:
+    id: Create [rent_period_x_flatmate_ad] Table
+    author: Máté Simon
+    changes:
+    - createTable:
+        tableName: rent_period_x_flatmate_ad
+        schemaName: cms_hun
+        columns:
+        - column:
+            name: id
+            type: int
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+        - column:
+            name: code_store_item_id
+            type: int
+        - column:
+            name: flatmate_ad_id
+            type: int

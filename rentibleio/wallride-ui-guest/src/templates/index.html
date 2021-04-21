@@ -1,0 +1,326 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title th:text="${WEBSITE_TITLE}">Title</title>
+    <!--/*/ <th:block th:replace="layout::head-link"> /*/-->
+    <link rel="alternate" type="application/atom+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/atom.xml}"/>
+    <link rel="alternate" type="application/rss+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/rss.xml}"/>
+    <link rel="stylesheet" th:href="@{/resources/bundle.css}" href="/resources/guest/bundle.css"/>
+    <link rel="stylesheet" th:href="@{/resources/bundle.css}" href="/resources/guest/bundle.css"/>
+    <link rel="stylesheet" th:href="@{/resources/search-bar.css}" href="/resources/guest/search-bar.css">
+    <script th:src="@{//code.jquery.com/jquery-1.11.1.min.js}" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script th:src="@{//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js}" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <!--/*/ </th:block> /*/-->
+    <!--/*/ <th:block th:replace="layout::head-script"> /*/-->
+    <script src="/resources/guest/bundle.js"></script>
+    <!--/*/ </th:block> /*/-->
+    <script th:replace="google-analytics::ga(null)"></script>
+    <!--<script th:src="@{/resources/scripts/datepicker.js}" />-->
+</head>
+<body>
+<div id="wrap">
+
+    <div th:replace="layout::nav"></div>
+    <div class="container">
+        <div class="container text-center">
+            <div class="row">
+                <div style="padding: 0;" class="col-md-12" role="tabpanel">
+                    <!-- Nav tabs -->
+                    <ul style="margin-bottom: 10px;" class="nav nav-justified" id="nav-tabs" role="tablist">
+                        <li role="presentation" class="active search-tab-li">
+                            <a href="#apartment" role="tab" data-toggle="tab">
+                                <span class="round-tab"><i class="fas fa-home"></i></span>
+                            </a>
+                        </li>
+                        <li role="presentation" class="search-tab-li">
+                            <a href="#room" role="tab" data-toggle="tab">
+                                <span class="round-tab"><i class="fas fa-bed"></i></span>
+                            </a>
+                        </li>
+                        <li role="presentation" class="search-tab-li">
+                            <a href="#flatmate" role="tab" data-toggle="tab">
+                                <span class="round-tab"><i class="fas fa-male"></i></span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content search-bar-box" id="tabs-collapse">
+
+                        <!-- APARTMENT FORM -->
+                        <div role="tabpanel" class="tab-pane fade in active" id="apartment">
+                            <form th:action="@{/home}" th:object="${form}" method="GET" role="form">
+
+                                <!-- APARTMENT SEARCH BAR -->
+                                <div style="margin-bottom: 50px;" class="tab-inner">
+                                    <h2 class="search-bar-text">FIND APARTMENTS TO RENT</h2>
+                                    <div class="search-bar-background col-sm-11">
+                                        <select th:field="*{room}" class="search-bar-input col-sm-3 responsive-search-input-100" id="bedrooms">
+                                            <option value="0">Number of rooms</option>
+                                            <option th:each="room : ${numberOfRooms}" th:value="${room.id}" th:text="${room.caption}"></option>
+                                        </select>
+                                        <input th:field="*{from}" class="search-bar-input col-sm-2 responsive-search-input-66" type="date"/>
+                                        <select th:field="*{currency}" class="search-bar-input col-sm-2 responsive-search-input-33 responsive-search-input-currency" id="currency">
+                                            <option value="0">Select currency</option>
+                                            <option th:each="currency : ${currencies}" th:value="${currency.id}" th:text="${currency.caption}"></option>
+                                        </select>
+                                        <input th:field="*{minPrice}" class="search-bar-input col-sm-2 responsive-search-input-49" type="text" th:attr="placeholder='Min'"/>
+                                        <input th:field="*{maxPrice}" class="search-bar-input col-sm-2 responsive-search-input-50" type="text" th:attr="placeholder='Max'"/>
+                                    </div>
+                                    <button class="btn btn-lg active-tab search-btn col-sm-1"><span th:text="Search">Search</span></button>
+                                </div>
+
+                                <!-- APARTMENT CONTENT -->
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-4 col-lg-3" th:each="property : ${properties}">
+                                        <div class="thumbnail property-card">
+                                            <img th:src="@{/media/property1.jpg}" style="height: 200px;"
+                                                 class="img-responsive">
+                                            <div style="text-align: left" class="caption responsive-property-items">
+                                                <p class="property-title" th:text="${property.title}"></p>
+                                                <div class="property-card-item">
+                                                    <i class="fas fa-map-marker-alt property-card-item-icon"></i>
+                                                    <p class="property-card-item-text" th:text="${property.crossStreet1}"></p>
+                                                </div>
+                                                <br>
+                                                <div class="property-card-item">
+                                                    <i class="far fa-money-bill-alt property-card-item-icon"></i>
+                                                    <p class="property-card-item-text" th:text="#{Price}"></p>
+                                                    <p class="property-card-item-text" th:text="${property.rentPrice}"></p>
+                                                    <p class="property-card-item-after" th:text="${property.rentPriceCurrency.caption}"></p>
+                                                </div>
+                                                <br>
+                                                <div class="property-card-item">
+                                                    <i class="fas fa-arrows-alt-h property-card-item-icon"></i>
+                                                    <p class="property-card-item-text" th:text="#{Size}"></p>
+                                                    <p class="property-card-item-text" th:text="${property.apartmentSize}"></p>
+                                                    <p class="property-card-item-after" th:text="#{Sqm}"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- APARTMENT PAGINATOR -->
+                                <div class="paginator-container">
+                                    <ul class="pagination pagination-lg">
+                                        <li th:if="${currentPage > 1 and totalPages > 7}" class="page-item">
+                                            <a th:href="@{/home(size=${properties.size},
+                                                        page=1,
+                                                        room=${form.room},
+                                                        from=${form.from},
+                                                        currency=${form.currency},
+                                                        minPrice=${form.minPrice},
+                                                        maxPrice=${form.maxPrice})}"
+                                               th:text="1" }
+                                               th:class="pagination-btn"></a>
+                                        </li>
+                                        <li th:if="${currentPage > 2 and totalPages > 7}" class="page-item">
+                                            <span class="pagination-btn">...</span>
+                                        </li>
+                                        <li th:if="${properties.totalPages > 0}" th:each="pageNumber : ${pageNumbers}" class="page-item">
+                                            <a th:href="@{/home(size=${properties.size},
+                                                        page=${pageNumber},
+                                                        room=${form.room},
+                                                        from=${form.from},
+                                                        currency=${form.currency},
+                                                        minPrice=${form.minPrice},
+                                                        maxPrice=${form.maxPrice})}"
+                                               th:text=${pageNumber}
+                                               th:classappend="${currentPage == pageNumber} ? active-pagination-btn : pagination-btn"></a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </form>
+                        </div>
+
+                        <!-- ROOM FORM -->
+                        <div role="tabpanel" class="tab-pane fade" id="room">
+                            <form th:action="@{/home}" th:object="${form}" method="GET" role="form">
+
+                                <!-- ROOM SEARCH BAR -->
+                                <div style="margin-bottom: 50px;" class="tab-inner">
+                                    <h2 class="search-bar-text">FIND ROOMS TO RENT</h2>
+                                    <div class="search-bar-background col-sm-11">
+                                        <select class="search-bar-input col-sm-3 responsive-search-input-100" id="period">
+                                            <option value="0">Rent period</option>
+                                            <option th:each="term : ${termOfLease}" th:value="${term.id}" th:text="${term.caption}"></option>
+                                        </select>
+                                        <input th:field="*{from}" class="search-bar-input col-sm-2 responsive-search-input-66" type="date"/>
+                                        <select th:field="*{currency}" class="search-bar-input col-sm-2 responsive-search-input-33 responsive-search-input-currency" id="currencyRoom">
+                                            <option value="0">Select currency</option>
+                                            <option th:each="currency : ${currencies}" th:value="${currency.id}" th:text="${currency.caption}"></option>
+                                        </select>
+                                        <input th:field="*{minPrice}" class="search-bar-input col-sm-2 responsive-search-input-49" type="text" th:attr="placeholder='Min'"/>
+                                        <input th:field="*{maxPrice}" class="search-bar-input col-sm-2 responsive-search-input-50" type="text" th:attr="placeholder='Max'"/>
+                                    </div>
+                                    <button class="btn btn-lg active-tab search-btn col-sm-1"><span th:text="Search">Search</span></button>
+                                </div>
+
+                                <!-- ROOM CONTENT -->
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-4 col-lg-3" th:each="property : ${properties}">
+                                        <div class="thumbnail property-card">
+                                            <img th:src="@{/media/property1.jpg}" style="height: 200px;"
+                                                 class="img-responsive">
+                                            <div style="text-align: left" class="caption responsive-property-items">
+                                                <p class="property-title" th:text="${property.title}"></p>
+                                                <div class="property-card-item">
+                                                    <i class="fas fa-map-marker-alt property-card-item-icon"></i>
+                                                    <p class="property-card-item-text" th:text="${property.crossStreet1}"></p>
+                                                </div>
+                                                <br>
+                                                <div class="property-card-item">
+                                                    <i class="far fa-money-bill-alt property-card-item-icon"></i>
+                                                    <p class="property-card-item-text" th:text="#{Price}"></p>
+                                                    <p class="property-card-item-text" th:text="${property.rentPrice}"></p>
+                                                    <p class="property-card-item-after" th:text="${property.rentPriceCurrency.caption}"></p>
+                                                </div>
+                                                <br>
+                                                <div class="property-card-item">
+                                                    <i class="fas fa-arrows-alt-h property-card-item-icon"></i>
+                                                    <p class="property-card-item-text" th:text="#{Size}"></p>
+                                                    <p class="property-card-item-text" th:text="${property.apartmentSize}"></p>
+                                                    <p class="property-card-item-after" th:text="#{Sqm}"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ROOM PAGINATOR -->
+                                <div class="paginator-container">
+                                    <ul class="pagination pagination-lg">
+                                        <li th:if="${currentPage > 1 and totalPages > 7}" class="page-item">
+                                            <a th:href="@{/home(size=${properties.size},
+                                                        page=1,
+                                                        room=${form.room},
+                                                        from=${form.from},
+                                                        currency=${form.currency},
+                                                        minPrice=${form.minPrice},
+                                                        maxPrice=${form.maxPrice})}"
+                                               th:text="1" }
+                                               th:class="pagination-btn"></a>
+                                        </li>
+                                        <li th:if="${currentPage > 2 and totalPages > 7}" class="page-item">
+                                            <span class="pagination-btn">...</span>
+                                        </li>
+                                        <li th:if="${properties.totalPages > 0}" th:each="pageNumber : ${pageNumbers}" class="page-item">
+                                            <a th:href="@{/home(size=${properties.size},
+                                                        page=${pageNumber},
+                                                        room=${form.room},
+                                                        from=${form.from},
+                                                        currency=${form.currency},
+                                                        minPrice=${form.minPrice},
+                                                        maxPrice=${form.maxPrice})}"
+                                               th:text=${pageNumber}
+                                               th:classappend="${currentPage == pageNumber} ? active-pagination-btn : pagination-btn"></a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </form>
+                        </div>
+
+                        <!-- FLATMATE FORM -->
+                        <div role="tabpanel" class="tab-pane fade" id="flatmate">
+                            <form th:action="@{/home}" th:object="${form}" method="GET" role="form">
+
+                                <!-- FLATMATE SEARCH BAR -->
+                                <div style="margin-bottom: 50px;" class="tab-inner">
+                                    <h2 class="search-bar-text">FIND FLATMATES</h2>
+                                    <div class="search-bar-background col-sm-11">
+                                        <select class="search-bar-input col-sm-3 responsive-search-input-100" id="gender">
+                                            <option>All genders</option>
+                                            <option th:each="gender : ${genders}" th:value="${gender.id}" th:text="${gender.caption}"></option>
+                                        </select>
+                                        <input th:field="*{from}" class="search-bar-input col-sm-2 responsive-search-input-66" type="date"/>
+                                        <select th:field="*{currency}" class="search-bar-input col-sm-2 responsive-search-input-33 responsive-search-input-currency" id="currencyFlatmate">
+                                            <option value="0">Select currency</option>
+                                            <option th:each="currency : ${currencies}" th:value="${currency.id}" th:text="${currency.caption}"></option>
+                                        </select>
+                                        <input th:field="*{minPrice}" class="search-bar-input col-sm-2 responsive-search-input responsive-search-input-49" type="text" th:attr="placeholder='Min'"/>
+                                        <input th:field="*{maxPrice}" class="search-bar-input col-sm-2 responsive-search-input responsive-search-input-50" type="text" th:attr="placeholder='Max'"/>
+                                    </div>
+                                    <button class="btn btn-lg active-tab search-btn col-sm-1"><span th:text="Search">Search</span></button>
+                                </div>
+
+                                <!-- FLATMATE CONTENT -->
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-4 col-lg-3" th:each="property : ${properties}">
+                                        <div class="thumbnail property-card">
+                                            <img th:src="@{/media/property1.jpg}" style="height: 200px;"
+                                                 class="img-responsive">
+                                            <div style="text-align: left" class="caption responsive-property-items">
+                                                <p class="property-title" th:text="${property.title}"></p>
+                                                <div class="property-card-item">
+                                                    <i class="fas fa-map-marker-alt property-card-item-icon"></i>
+                                                    <p class="property-card-item-text" th:text="${property.crossStreet1}"></p>
+                                                </div>
+                                                <br>
+                                                <div class="property-card-item">
+                                                    <i class="far fa-money-bill-alt property-card-item-icon"></i>
+                                                    <p class="property-card-item-text" th:text="#{Price}"></p>
+                                                    <p class="property-card-item-text" th:text="${property.rentPrice}"></p>
+                                                    <p class="property-card-item-after" th:text="${property.rentPriceCurrency.caption}"></p>
+                                                </div>
+                                                <br>
+                                                <div class="property-card-item">
+                                                    <i class="fas fa-arrows-alt-h property-card-item-icon"></i>
+                                                    <p class="property-card-item-text" th:text="#{Size}"></p>
+                                                    <p class="property-card-item-text" th:text="${property.apartmentSize}"></p>
+                                                    <p class="property-card-item-after" th:text="#{Sqm}"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- FLATMATE PAGINATOR -->
+                                <div class="paginator-container">
+                                    <ul class="pagination pagination-lg">
+                                        <li th:if="${currentPage > 1 and totalPages > 7}" class="page-item">
+                                            <a th:href="@{/home(size=${properties.size},
+                                                        page=1,
+                                                        room=${form.room},
+                                                        from=${form.from},
+                                                        currency=${form.currency},
+                                                        minPrice=${form.minPrice},
+                                                        maxPrice=${form.maxPrice})}"
+                                               th:text="1" }
+                                               th:class="pagination-btn"></a>
+                                        </li>
+                                        <li th:if="${currentPage > 2 and totalPages > 7}" class="page-item">
+                                            <span class="pagination-btn">...</span>
+                                        </li>
+                                        <li th:if="${properties.totalPages > 0}" th:each="pageNumber : ${pageNumbers}" class="page-item">
+                                            <a th:href="@{/home(size=${properties.size},
+                                                        page=${pageNumber},
+                                                        room=${form.room},
+                                                        from=${form.from},
+                                                        currency=${form.currency},
+                                                        minPrice=${form.minPrice},
+                                                        maxPrice=${form.maxPrice})}"
+                                               th:text=${pageNumber}
+                                               th:classappend="${currentPage == pageNumber} ? active-pagination-btn : pagination-btn"></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="layout::footer" id="footer"></div>
+</body>
+</html>

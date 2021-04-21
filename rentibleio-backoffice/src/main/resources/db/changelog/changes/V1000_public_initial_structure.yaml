@@ -1,0 +1,475 @@
+databaseChangeLog:
+    - preConditions:
+      - runningAs:
+          username: postgres
+
+    - changeSet:
+        id: Create [code_store_type] Table
+        author: Tivadar Bocz
+        changes:
+            - createTable:
+                tableName: code_store_type
+                columns:
+                  - column:
+                      name: id
+                      type: int
+                      autoIncrement: true
+                      constraints:
+                        primaryKey: true
+                        nullable: false
+                  - column:
+                      name: caption
+                      type: varchar
+                      constraints:
+                        nullable: false
+                        unique: true
+                  - column:
+                      name: enabled
+                      type: boolean
+                  - column:
+                      name: created_on
+                      type: timestamp
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: created_by
+                      type: int
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: modified_on
+                      type: timestamp
+                  - column:
+                      name: modified_by
+                      type: int
+
+    - changeSet:
+        id: Create [code_store_item] Table
+        author: Tivadar Bocz
+        changes:
+            - createTable:
+                tableName: code_store_item
+                columns:
+                  - column:
+                      name: id
+                      type: int
+                      constraints:
+                        primaryKey: true
+                        nullable: false
+                  - column:
+                      name: code_store_type_id
+                      type: int
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: caption
+                      type: jsonb
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: enabled
+                      type: boolean
+                  - column:
+                      name: created_on
+                      type: timestamp
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: created_by
+                      type: int
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: modified_on
+                      type: timestamp
+                  - column:
+                      name: modified_by
+                      type: int
+
+    - changeSet:
+        id: Create [role] Table
+        author: Tivadar Bocz
+        changes:
+            - createTable:
+                tableName: role
+                columns:
+                  - column:
+                      name: id
+                      type: int
+                      autoIncrement: true
+                      startWith: 105  #TODO: ez miért nem működik?
+                      constraints:
+                        primaryKey: true
+                        nullable: false
+                  - column:
+                      name: name
+                      type: varchar(50)
+                      constraints:
+                        nullable: false
+
+    - changeSet:
+        id: Create [user] Table
+        author: Tivadar Bocz
+        changes:
+            - createTable:
+                tableName: user
+                columns:
+                  - column:
+                      name: id
+                      type: int
+                      autoIncrement: true
+                      constraints:
+                        primaryKey: true
+                  - column:
+                      name: username
+                      type: varchar(50)
+                  - column:
+                      name: email
+                      type: varchar(50)
+                      constraints:
+                        unique: true
+                  - column:
+                      name: password
+                      type: varchar(100)
+                  - column:
+                      name: schema_id
+                      type: int
+                  - column:
+                      name: google_auth
+                      type: boolean
+                  - column:
+                      name: google_auth_qr_url
+                      type: varchar(255)
+                  - column:
+                      name: social_media_id
+                      type: int
+                  - column:
+                      name: enabled
+                      type: boolean
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: activation_token
+                      type: varchar(100)
+                  - column:
+                      name: last_logged_in
+                      type: timestamp
+                  - column:
+                      name: number_of_login
+                      type: int
+                  - column:
+                      name: language
+                      type: int
+                  - column:
+                      name: online
+                      type: boolean
+                  - column:
+                      name: secret
+                      type: varchar(255)
+                  - column:
+                      name: created_on
+                      type: timestamp
+                  - column:
+                      name: created_by
+                      type: int
+                  - column:
+                      name: modified_on
+                      type: timestamp
+                  - column:
+                      name: modified_by
+                      type: int
+
+    - changeSet:
+        id: Create [role] Table
+        author: Tivadar Bocz
+        changes:
+            - createTable:
+                tableName: role
+                columns:
+                  - column:
+                      name: id
+                      type: int
+                      autoIncrement: true
+                      startWith: 105  #TODO: ez miért nem működik?
+                      constraints:
+                        primaryKey: true
+                        nullable: false
+                  - column:
+                      name: name
+                      type: varchar(50)
+                      constraints:
+                        nullable: false
+
+    - changeSet:
+        id: Create [user_x_role] Table
+        author: Tivadar Bocz
+        changes:
+            - createTable:
+                tableName: user_x_role
+                columns:
+                  - column:
+                      name: user_role_id
+                      type: int
+                      autoIncrement: true
+                      constraints:
+                        primaryKey: true
+                  - column:
+                      name: user_id
+                      type: int
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: role_id
+                      type: int
+                      constraints:
+                        nullable: false
+
+    - changeSet:
+        id: Create [email_template] Table
+        author: Máté Simon
+        changes:
+            - createTable:
+                tableName: email_template
+                columns:
+                  - column:
+                      name: id
+                      type: int
+                      autoIncrement: true
+                      constraints:
+                        primaryKey: true
+                  - column:
+                      name: templ_code
+                      type: int
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: content
+                      type: varchar(255)
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: subject
+                      type: varchar(100)
+                  - column:
+                      name: enabled
+                      type: boolean
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: created_on
+                      type: timestamp
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: created_by
+                      type: int
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: modified_on
+                      type: timestamp
+                  - column:
+                      name: modified_by
+                      type: int
+
+    - changeSet:
+        id: Create [email] Table
+        author: Máté Simon
+        changes:
+            - createTable:
+                tableName: email
+                columns:
+                  - column:
+                      name: id
+                      type: int
+                      autoIncrement: true
+                      constraints:
+                        primaryKey: true
+                  - column:
+                      name: from_email
+                      type: varchar(255)
+                  - column:
+                      name: to_email
+                      type: varchar(255)
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: subject
+                      type: varchar(255)
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: body
+                      type: text
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: is_plain_text
+                      type: boolean
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: success
+                      type: boolean
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: attempt
+                      type: int
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: created_on
+                      type: timestamp
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: created_by
+                      type: int
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: modified_on
+                      type: timestamp
+                  - column:
+                      name: modified_by
+                      type: int
+
+    - changeSet:
+        id: Create [file_descriptor] Table
+        author: Tivadar Bocz
+        changes:
+            - createTable:
+                tableName: file_descriptor
+                columns:
+                  - column:
+                      name: id
+                      type: int
+                      autoIncrement: true
+                      constraints:
+                        primaryKey: true
+                  - column:
+                      name: uuid
+                      type: varchar(100)
+                  - column:
+                      name: original_name
+                      type: varchar(255)
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: file_path
+                      type: varchar(255)
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: mime_type
+                      type: varchar(32)
+                  - column:
+                      name: file_size
+                      type: int
+                  - column:
+                      name: description
+                      type: jsonb
+                  - column:
+                      name: created_on
+                      type: timestamp
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: created_by
+                      type: int
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: modified_on
+                      type: timestamp
+                  - column:
+                      name: modified_by
+                      type: int
+
+
+    - changeSet:
+        id: Create [site] Table
+        author: Tivadar Bocz
+        changes:
+        - createTable:
+            tableName: site
+            columns:
+            - column:
+                name: id
+                type: int
+                autoIncrement: true
+                constraints:
+                  primaryKey: true
+            - column:
+                name: country_name
+                type: varchar(255)
+            - column:
+                name: country_2_digit_iso
+                type: varchar(2)
+            - column:
+                name: country_3_digit_iso
+                type: varchar(3)
+
+    - changeSet:
+        id: Create [user_x_site] Table
+        author: Tivadar Bocz
+        changes:
+        - createTable:
+            tableName: user_x_site
+            columns:
+            - column:
+                name: id
+                type: int
+                autoIncrement: true
+                constraints:
+                  primaryKey: true
+            - column:
+                name: user_id
+                type: int
+            - column:
+                name: site_id
+                type: int
+
+    - changeSet:
+        id: Create [social_media] Table
+        author: Máté Simon
+        changes:
+        - createTable:
+            tableName: social_media
+            columns:
+            - column:
+                name: id
+                type: int
+                autoIncrement: true
+                constraints:
+                  primaryKey: true
+            - column:
+                name: social_media_type
+                type: int
+            - column:
+                name: social_media_user_id
+                type: varchar(32)
+            - column:
+                name: enabled
+                type: boolean
+            - column:
+                name: created_on
+                type: timestamp
+                constraints:
+                  nullable: false
+            - column:
+                name: created_by
+                type: int
+                constraints:
+                  nullable: false
+            - column:
+                name: modified_on
+                type: timestamp
+                constraints:
+                  nullable: false
+            - column:
+                name: modified_by
+                type: int
+                constraints:
+                  nullable: false

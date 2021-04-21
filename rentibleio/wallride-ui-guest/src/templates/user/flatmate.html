@@ -1,0 +1,131 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description"/>
+    <meta name="keywords"/>
+    <meta name="author" content=""/>
+    <title>Profile</title>
+    <!--/*/ <th:block th:replace="layout::head-link"> /*/-->
+    <link rel="alternate" type="application/atom+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/atom.xml}"/>
+    <link rel="alternate" type="application/rss+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/rss.xml}"/>
+    <link rel="stylesheet" th:href="@{/resources/bundle.css}" href="/resources/guest/bundle.css"/>
+    <script th:src="@{//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js}"
+            src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <!--/*/ </th:block> /*/-->
+    <!--/*/ <th:block th:replace="layout::head-script"> /*/-->
+    <script th:src="@{/resources/bundle.js}" src="/resources/guest/bundle.js"></script>
+    <!--/*/ </th:block> /*/-->
+    <script th:replace="google-analytics::ga(null)"></script>
+</head>
+<body>
+<div id="wrap">
+    <div th:replace="layout::nav"></div>
+    <div th:replace="layout::postAd"></div>
+    <div class="container l-5-vw r-5-vw">
+        <div class="row">
+            <div class="col-sm-3 min-height-95vh">
+                <img th:src="${profilePicturePath}"
+                     class="profile-img height-200">
+                <div th:replace="layout::profile"></div>
+            </div>
+            <form class="col-sm-9" th:action="@{/post-flatmate-ad}" th:object="${flatmateForm}" method="post"
+                  role="propertyForm">
+                <h3 id="adTitle" th:text="#{LookingForRoom}"></h3>
+                <div>
+                    <p class="alert alert-danger" th:if="${#fields.hasErrors('all')}" th:text="#{Error}">
+                        Error</p>
+                    <div>
+                        <div class="col-sm-12 top-space" th:classappend="${#fields.hasErrors('title')}? has-error">
+                            <label class="control-label ad-custom-font" th:text="#{Title}"></label>
+                            <input type="text" th:field="*{title}" class="custom-input form-control"
+                                   th:attr="placeholder=#{Title}" autocomplete="off" spellcheck="false"/>
+                            <span class="help-block" th:each="err : ${#fields.errors('title')}" th:text="${err}"/>
+                        </div>
+                        <div class="col-sm-12 top-space"
+                             th:classappend="${#fields.hasErrors('description')}? has-error">
+                            <label class="control-label ad-custom-font" th:text="#{Description}"></label>
+                            <div class="col-sm-12 p-0">
+                              <textarea class="custom-input" rows="4" cols="50"
+                                        th:attr="placeholder=#{AboutMe}" th:field="*{description}"></textarea>
+                            </div>
+                            <span class="help-block" th:each="err : ${#fields.errors('description')}"
+                                  th:text="${err}"/>
+                        </div>
+                        <div class="col-sm-12 top-space" th:classappend="${#fields.hasErrors('budget')}? has-error">
+                            <div class="col-sm-4">
+                                <span class="flatshares-font" th:text="#{Budget}"></span>
+                                <span class="not-null flatshares-font" th:text="'*'"></span>
+                            </div>
+                            <input type="text" th:field="*{budget}" class="col-sm-2 custom-input"
+                                   autocomplete="off"/>
+                            <select th:field="*{currency}" class="custom-input col-sm-2 col-sm-offset-1">
+                                <option th:each="currency : ${currencies}" th:value="${currency.id}"
+                                        th:text="${currency.caption}"></option>
+                            </select>
+                        </div>
+                        <div class="col-sm-12 top-space" th:classappend="${#fields.hasErrors('moveInFrom')}? has-error">
+                            <div class="col-sm-4">
+                                <span class="flatshares-font" th:text="#{MoveInFrom}"></span>
+                                <span class="not-null flatshares-font" th:text="'*'"></span>
+                            </div>
+                            <input th:field="*{moveInFrom}" class="col-sm-4 custom-input" type="date"/>
+                        </div>
+                        <div class="col-sm-12 top-space">
+                            <div class="col-sm-4">
+                                <span class="flatshares-font" th:text="#{SmokingInTheHouse}"></span>
+                                <span class="not-null flatshares-font" th:text="'*'"></span>
+                            </div>
+                            <div class="col-sm-4 input-container">
+                                <input type="radio" th:id="smokingNotAllowed" th:field="*{isSmokingAllowed}"
+                                       th:value="false"/>
+                                <label th:for="smokingNotAllowed" th:text="#{NotAllowed}"></label>
+                            </div>
+                            <div class="col-sm-4 input-container">
+                                <input type="radio" th:id="smokingAllowed" th:field="*{isSmokingAllowed}"
+                                       th:value="true"/>
+                                <label th:for="smokingAllowed" th:text="#{Allowed}"></label>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 top-space"
+                             th:classappend="${#fields.hasErrors('termOfLease')}? has-error">
+                            <div class="col-sm-4">
+                                <span class="flatshares-font" th:text="#{TermOfLease}"></span>
+                                <span class="not-null flatshares-font" th:text="'*'"></span>
+                            </div>
+                            <div class="col-sm-8">
+                                <select th:field="*{termOfLease}" class="custom-input">
+                                    <option th:each="term : ${termOfLease}" th:value="${term.id}"
+                                            th:text="${term.caption}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 top-space" th:classappend="${#fields.hasErrors('districts')}? has-error">
+                            <div class="col-sm-4">
+                                <span class="flatshares-font" th:text="#{District}"></span>
+                                <span class="not-null flatshares-font" th:text="'*'"></span>
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="col-sm-6 input-container" th:each="district : ${districts}">
+                                    <input type="checkbox" th:id="${district.caption}" th:field="*{districts}"
+                                           th:value="${district.id}"/>
+                                    <label th:for="${district.caption}" th:text="${district.caption}"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="list-inline pull-right">
+                            <li>
+                                <button class="default-flatshares-btn-next col-sm-4 col-sm-offset-4 next-step"
+                                        th:text="#{Publish}">
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

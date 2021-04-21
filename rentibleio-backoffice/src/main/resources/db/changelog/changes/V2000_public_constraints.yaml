@@ -1,0 +1,317 @@
+databaseChangeLog:
+- preConditions:
+  - runningAs:
+      username: postgres
+
+- changeSet:
+    id: Create [fk_user_schema_id_x_schema_id] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: schema_id
+        baseTableName: user
+        constraintName: fk_user_schema_x_schema_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: code_store_item
+
+- changeSet:
+    id: Create [fk_user_created_by_x_user_id] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: created_by
+        baseTableName: user
+        constraintName: fk_user_created_by_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+
+- changeSet:
+    id: Create [fk_user_modified_by_x_user_id] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: modified_by
+        baseTableName: user
+        constraintName: fk_user_modified_by_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+
+- changeSet:
+    id: Add [user_user_x_role] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: user_x_role
+        constraintName: fk_user_user_x_role
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+
+- changeSet:
+    id: Add [role_user_x_role] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: role_id
+        baseTableName: user_x_role
+        constraintName: fk_role_user_x_role
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: role
+
+- changeSet:
+    id: Create [fk_email_template_created_by_x_user_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: created_by
+        baseTableName: email_template
+        constraintName: fk_email_template_created_by_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+
+- changeSet:
+    id: Create [fk_email_template_modified_by_x_user_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: modified_by
+        baseTableName: email_template
+        constraintName: fk_email_template_modified_by_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+
+- changeSet:
+    id: Create [fk_email_created_by_x_user_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: created_by
+        baseTableName: email
+        constraintName: fk_email_created_by_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+
+- changeSet:
+    id: Create [fk_email_modified_by_x_user_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: modified_by
+        baseTableName: email
+        constraintName: fk_email_modified_by_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+
+- changeSet:
+    id: Create [fk_file_descriptor_created_by_x_user_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: created_by
+        baseTableName: file_descriptor
+        constraintName: fk_file_descriptor_created_by_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+
+- changeSet:
+    id: Create [fk_file_descriptor_modified_by_x_user_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: modified_by
+        baseTableName: file_descriptor
+        constraintName: fk_file_descriptor_modified_by_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+
+- changeSet:
+    id: Add [code_store_item_x_code_store_type] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: code_store_type_id
+        baseTableName: code_store_item
+        constraintName: fk_code_store_item_x_code_store_type
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: code_store_type
+
+- changeSet:
+    id: Create [fk_code_store_item_created_by_x_user_id] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: created_by
+        baseTableName: code_store_item
+        constraintName: fk_code_store_item_created_by_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+
+- changeSet:
+    id: Create [fk_code_store_item_modified_by_x_user_id] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: modified_by
+        baseTableName: code_store_item
+        constraintName: fk_code_store_item_modified_by_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+
+- changeSet:
+    id: Create [fk_code_store_type_created_by_x_user_id] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: created_by
+        baseTableName: code_store_type
+        constraintName: fk_code_store_type_created_by_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+
+- changeSet:
+    id: Create [fk_code_store_type_modified_by_x_user_id] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: modified_by
+        baseTableName: code_store_type
+        constraintName: fk_code_store_type_modified_by_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+
+- changeSet:
+    id: Create [fk_user_site_user_id_x_user_id] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: user_x_site
+        constraintName: fk_user_site_user_id_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+
+- changeSet:
+    id: Create [fk_user_site_site_id_x_site_id] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: site_id
+        baseTableName: user_x_site
+        constraintName: fk_user_site_site_id_x_site_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: site
+
+- changeSet:
+      id: Add unique constraint[username, schema_id] to user
+      author: Tivadar Bocz
+      changes:
+      - addUniqueConstraint:
+            columnNames: username, schema_id
+            constraintName: unique_username_and_schema_id
+            deferrable: true
+            disabled: true
+            initiallyDeferred: true
+            schemaName: public
+            tableName: user
+
+- changeSet:
+    id: Create [fk_social_media_created_by_x_user_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: created_by
+        baseTableName: social_media
+        constraintName: fk_social_media_created_by_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+
+- changeSet:
+    id: Create [fk_social_media_modified_by_x_user_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: modified_by
+        baseTableName: social_media
+        constraintName: fk_social_media_modified_by_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user

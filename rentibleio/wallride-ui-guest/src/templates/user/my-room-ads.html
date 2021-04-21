@@ -1,0 +1,93 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description"/>
+    <meta name="keywords"/>
+    <meta name="author" content=""/>
+    <title>Profile</title>
+    <!--/*/ <th:block th:replace="layout::head-link"> /*/-->
+    <link rel="alternate" type="application/atom+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/atom.xml}"/>
+    <link rel="alternate" type="application/rss+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/rss.xml}"/>
+    <link rel="stylesheet" th:href="@{/resources/bundle.css}" href="/resources/guest/bundle.css"/>
+    <script th:src="@{//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js}"
+            src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <!--/*/ </th:block> /*/-->
+    <!--/*/ <th:block th:replace="layout::head-script"> /*/-->
+    <script th:src="@{/resources/bundle.js}" src="/resources/guest/bundle.js"></script>
+    <!--/*/ </th:block> /*/-->
+    <script th:replace="google-analytics::ga(null)"></script>
+</head>
+<body>
+<div id="wrap">
+    <div th:replace="layout::nav"></div>
+    <div class="container l-5-vw r-5-vw">
+        <div class="row">
+            <div class="col-sm-3 min-height-95vh">
+                <img th:src="${PROFILE_PIC_PATH}"
+                     class="profile-img height-200">
+                <div th:replace="layout::profile"></div>
+            </div>
+
+            <div class="col-sm-8 col-sm-offset-1 mt-10">
+                <div class="profile-edit-title">
+                    <h3 th:text="#{MyRoomAds}"></h3>
+                </div>
+                <hr>
+            </div>
+
+            <form th:object="${form}" method="post" role="form">
+                <div class="col-sm-8 col-sm-offset-1">
+                    <a class="col-sm-6 text-deco-none pr-10" target="_blank" th:each="property : ${properties}"
+                       th:href="@{/property-view(id=${property.id})}">
+                        <div class="property-card">
+                            <div id="slider">
+                                <!-- Top part of the slider -->
+                                <div id="carousel-bounding-box">
+                                    <div class="carousel slide" id="myCarousel">
+                                        <!-- Carousel items -->
+                                        <div class="carousel-inner">
+                                            <div class="item active property-list-img"
+                                                 th:style="'background-image:url(' + @{|/media/${property.images[0].filePath}|} + ');'"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-left caption property-card-items responsive-property-items">
+                                <p class="property-title" th:text="${property.title}"></p>
+                                <div class="property-card-item">
+                                    <p class="property-card-details"
+                                       th:text="${property.address.city} + ', ' + ${property.address.address1} + ' ' + ${property.address.address2} + ', ' +
+                                                ${property.apartmentSize} + ' ' +
+                                                #{Sqm}"
+                                    ></p>
+                                </div>
+                                <div class="property-card-item">
+                                    <p class="property-card-description"
+                                       th:text="${property.description}"></p>
+                                </div>
+
+                                <div class="property-card-item-price">
+                                    <p th:if="${property.currencyCaption} == 'EUR'"
+                                       th:text=" '€' + ' ' +  ${property.rentPrice} + ' / ' + #{Month}"></p>
+                                    <p th:if="${property.currencyCaption} == 'HUF'"
+                                       th:text="${property.rentPrice} + ' ' + ${property.currencyCaption} + ' / ' + #{Month}"></p>
+                                </div>
+
+                                <div class="property-card-item-icon">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

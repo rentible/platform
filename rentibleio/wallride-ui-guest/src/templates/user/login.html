@@ -1,0 +1,156 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description"/>
+    <meta name="keywords"/>
+    <meta name="author" content=""/>
+    <title>Login</title>
+    <!--/*/ <th:block th:replace="layout::head-link"> /*/-->
+    <link rel="alternate" type="application/atom+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/atom.xml}"/>
+    <link rel="alternate" type="application/rss+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/rss.xml}"/>
+    <link rel="stylesheet" th:href="@{/resources/bundle.css}" href="/resources/guest/bundle.css"/>
+    <!--/*/ </th:block> /*/-->
+    <!--/*/ <th:block th:replace="layout::head-script"> /*/-->
+    <script th:src="@{/resources/bundle.js}" src="/resources/guest/bundle.js"></script>
+    <!--/*/ </th:block> /*/-->
+    <script th:replace="google-analytics::ga(null)"></script>
+</head>
+<body>
+<div id="wrap">
+    <div th:replace="layout::nav"></div>
+    <div class="container">
+        <div class="row col-sm-12">
+
+            <!-- SIGN UP -->
+            <div class="col-sm-6 content-box login-separator">
+                <div class="page-header sign-up-header mt-10">
+                    <h1><span class="sign-up-header-content" th:text="#{Signup}"></span></h1>
+                </div>
+                <form th:action="@{/signup}" th:object="${signUpForm}" method="post" role="form">
+                    <p class="alert alert-danger" th:if="${#fields.hasErrors('all')}" th:text="#{Error}">Error</p>
+                    <!--First Name-->
+                    <div class="form-group col-sm-6" th:classappend="${#fields.hasErrors('firstName')}? has-error">
+                        <!--<label class="control-label" th:text="#{FirstName}">FirstName</label>-->
+                        <div>
+                            <input class="custom-input form-control" type="text" th:field="*{firstName}"
+                                   placeholder="First Name" th:attr="placeholder=#{FirstName}"/>
+                            <span class="help-block" th:each="err : ${#fields.errors('firstName')}" th:text="${err}"/>
+                        </div>
+                    </div>
+                    <!--Last Name-->
+                    <div class="form-group col-sm-6" th:classappend="${#fields.hasErrors('lastName')}? has-error">
+                        <!--<label class="control-label" th:text="#{LastName}">LastName</label>-->
+                        <div>
+                            <input class="custom-input form-control" type="text" th:field="*{lastName}"
+                                   placeholder="Last Name" th:attr="placeholder=#{LastName}"/>
+                            <span class="help-block" th:each="err : ${#fields.errors('lastName')}" th:text="${err}"/>
+                        </div>
+                    </div>
+                    <!--E-mail-->
+                    <div class="form-group col-sm-12" th:classappend="${#fields.hasErrors('email')}? has-error">
+                        <!--<label class="control-label" th:text="#{Email}">E-mail</label>-->
+                        <div>
+                            <input class="custom-input form-control" type="text" th:field="*{email}"
+                                   th:attr="placeholder=#{Email}" autocomplete="off"/>
+                            <span class="help-block" th:each="err : ${#fields.errors('email')}" th:text="${err}"/>
+                        </div>
+                    </div>
+                    <!--Password-->
+                    <div class="form-group col-sm-12" th:classappend="${#fields.hasErrors('password')}? has-error">
+                        <!--<label class="control-label" th:text="#{Password}">Password</label>-->
+                        <div>
+                            <input class="custom-input form-control" type="password" th:field="*{password}"
+                                   th:attr="placeholder=#{Password}" placeholder="Password" autocomplete="off"/>
+                            <span class="help-block" th:each="err : ${#fields.errors('password')}" th:text="${err}"/>
+                        </div>
+                    </div>
+
+                    <!--Password Confirm-->
+                    <div class="form-group col-sm-12"
+                         th:classappend="${#fields.hasErrors('passwordConfirmation')}? has-error">
+                        <div>
+                            <input class="custom-input form-control" type="password" th:field="*{passwordConfirmation}"
+                                   th:attr="placeholder=#{passwordConfirmation}" placeholder="Confirm password"
+                                   autocomplete="off"/>
+                            <span class="help-block" th:each="err : ${#fields.errors('passwordConfirmation')}"
+                                  th:text="${err}"/>
+                        </div>
+                    </div>
+
+                    <!-- <div class="col-md-12">
+                        <ul class="list-group list-group-flush">
+                            <li class="google-auth-list-item">
+                                Use Google 2-Step Verification
+                                <label class="switch">
+                                    <input type="checkbox" name="googleAuth" th:checked="*{googleAuth}"
+                                           class="danger">
+                                    <span class="slider round"></span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div> -->
+
+                    <div class="form-group col-sm-12 mt--5">
+                        <button class="default-flatshares-btn login-btn btn btn-lg btn-primary"><span th:text="#{Join}">Join</span>
+                        </button>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <div class="text-align-center">
+                            or
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <a th:href="@{/oauth2/authorize/facebook?redirect_uri=/oauth2/callback}"
+                           class="facebook-sign-up-btn btn btn-lg btn-primary"><span
+                                th:text="#{Facebook}">Facebook</span></a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- LOGIN -->
+            <div class="col-sm-6 content-box">
+                <div class="page-header sign-up-header">
+                    <h1 class="sign-up-header-content" th:text="#{LogIn}">Login</h1>
+                </div>
+                <form th:action="@{/login}" action="#" method="post">
+                    <div class="form-group col-sm-12">
+                        <input type="text" name="username" class="custom-input form-control"
+                               th:attr="placeholder=#{UserName}" autofocus="autofocus" autocomplete="off"/>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <input type="password" name="password" class="custom-input form-control"
+                               th:attr="placeholder=#{Password}" autocomplete="off"/>
+                    </div>
+                    <!-- <div class="form-group col-sm-12">
+                        <input type="text" name="code" class="sign-up-input form-control" th:attr="placeholder=#{Google2FA}" autocomplete="off" />
+                    </div> -->
+                    <div class="form-group col-sm-12">
+                        <button class="default-flatshares-btn login-btn btn btn-lg btn-primary" type="submit"
+                                th:text="#{LogIn}">Log in
+                        </button>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <a th:href="@{/oauth2/authorize/facebook}"
+                           class="facebook-sign-up-btn btn btn-lg btn-primary"><span
+                                th:text="#{Facebook}">Facebook</span></a>
+                    </div>
+                    <div class="form-group col-sm-12 checkbox">
+                        <div class="col-sm-6 text-align-center">
+                            <label th:text="#{ForgotPassword}"></label>
+                        </div>
+                        <div class="col-sm-6 text-align-center">
+                            <label><input class="ml--25 mt-0" type="checkbox"
+                                          name="remember-me" th:text="#{RememberMe}"/></label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <div th:replace="layout::footer" id="footer"></div> -->
+</body>
+</html>

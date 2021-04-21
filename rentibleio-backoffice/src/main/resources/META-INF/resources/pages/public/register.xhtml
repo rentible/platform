@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+
+<h:head>
+    <title>Register</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css"/>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"/>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"/>
+</h:head>
+
+<h:body styleClass="login-background">
+    <h:outputStylesheet library="css" name="login.css"/>
+    <div class="valign-wrapper" id="login-page" style="height: 100vh;">
+        <div class="container">
+            <div class="center-align">
+                <div class="row">
+                    <div class="col s6 offset-s3 responsive-card">
+                        <div class="card">
+                            <div class="card-content responsive-card-content">
+                                <h:graphicImage library="images" name="logo1.svg" style="max-width: 256px; margin-top: 20px;"/>
+                                <h:form prependId="false" id="form-register">
+
+                                    <p:tabView>
+                                        <p:tab title="Account details">
+                                            <h:panelGrid columns="2" cellpadding="10">
+                                                <p:panelGrid id="registerInputs" columns="1" styleClass="ui-fluid center ui-noborder">
+
+                                                    <div class="row">
+                                                        <div class="col s12 input-field">
+                                                            <p:outputLabel styleClass="responsive-login-label" for="emailId"
+                                                                           value="E-mail"/>
+                                                            <p:inputText styleClass="responsive-login-input"
+                                                                         value="#{registerController.user.email}" id="emailId" required="true"
+                                                                         requiredMessage="E-mail required"
+                                                                         validatorMessage="Invalid email format">
+                                                                <f:validator validatorId="emailValidator"/>
+                                                            </p:inputText>
+                                                            <p:message for="emailId" style="color:red"/>
+                                                        </div>
+
+
+                                                        <h:form rendered="${!empty param['emailError']}">
+                                                            <div style="color:red">
+                                                                E-mail already in use!
+                                                            </div>
+                                                        </h:form>
+
+                                                        <div class="col s12 input-field">
+                                                            <p:outputLabel styleClass="responsive-login-label" for="passwordId"
+                                                                           value="Password"/>
+                                                            <p:password id="passwordId"
+                                                                        styleClass="responsive-login-input"
+                                                                        value="#{registerController.user.password}"
+                                                                        feedback="false"
+                                                                        required="true"
+                                                                        validatorMessage="Minimum password length is 8"
+                                                                        requiredMessage="Password required">
+                                                                <f:validateLength minimum="8" maximum="100"/>
+                                                            </p:password>
+                                                            <h:message for="passwordId" style="color:red"/>
+                                                        </div>
+
+                                                        <div class="col s12 input-field">
+                                                            <p:outputLabel styleClass="responsive-login-label" for="repasswordId"
+                                                                           value="Re-enter password"/>
+                                                            <p:password id="repasswordId"
+                                                                        value="#{passwordValidator.passwordConfirm}"
+                                                                        styleClass="responsive-login-input"
+                                                                        feedback="false"
+                                                                        required="true"
+                                                                        requiredMessage="Please re-enter the password">
+                                                                <f:validator validatorId="passwordValidator"/>
+                                                            </p:password>
+                                                            <p:message for="repasswordId" style="color:red"/>
+                                                        </div>
+
+                                                        <h:form>
+                                                            <div id="passwordMatchError" style="display: none;">
+                                                                Passwords does not match!
+                                                            </div>
+                                                        </h:form>
+
+                                                        <div style="width: 100%" class="center-align">
+                                                            <p id="googleAuthBtn"
+                                                               onclick="changeGoogleBtnClass()"
+                                                               class="btn white darken-4 col s10 m4 google-btn disable-select">
+                                                                Using Google Auth
+                                                            </p>
+                                                        </div>
+                                                        <h:selectBooleanCheckbox style="display: none" id="googleAuthCB" value="#{registerController.user.googleAuth}"/>
+
+                                                    </div>
+
+                                                </p:panelGrid>
+
+                                            </h:panelGrid>
+                                        </p:tab>
+                                        <p:tab title="Personal data">
+                                            <h:panelGrid columns="2" cellpadding="10">
+                                                <p:panelGrid id="registerInputs2" columns="1" styleClass="ui-fluid center ui-noborder">
+
+                                                    <div class="row">
+                                                        <div class="col s12 input-field">
+                                                            <p:outputLabel styleClass="responsive-login-label" for="birthDate"
+                                                                           value="Birth Date"/>
+                                                            <p:calendar id="birthDate"
+                                                                        value="#{registerController.user.userDetail.dateOfBirth}"
+                                                                        showOn="button">
+                                                                <f:convertDateTime pattern="MM/dd/yyyy"/>
+                                                                <f:converter converterId="timestampConverter"/>
+                                                            </p:calendar>
+                                                        </div>
+                                                        <div class="col s12 input-field">
+                                                            <p:outputLabel styleClass="responsive-login-label" for="gender"
+                                                                           value="Gender"/>
+                                                            <p:inputText styleClass="responsive-login-input"
+                                                                         value="#{registerController.user.userDetail.gender}"
+                                                                         id="gender" required="false">
+                                                            </p:inputText>
+                                                        </div>
+                                                        <div class="col s12 input-field">
+                                                            <p:outputLabel styleClass="responsive-login-label" for="phone"
+                                                                           value="Phone number"/>
+                                                            <p:inputNumber styleClass="responsive-login-input"
+                                                                           value="#{registerController.user.userDetail.phoneNumber}"
+                                                                           id="phone" required="false">
+                                                            </p:inputNumber>
+                                                        </div>
+                                                        <div class="col s12 input-field">
+                                                            <p:outputLabel styleClass="responsive-login-label" for="language"
+                                                                           value="Language"/>
+                                                            <p:inputText styleClass="responsive-login-input"
+                                                                         value="#{registerController.user.language}" id="language" required="false">
+                                                            </p:inputText>
+                                                        </div>
+                                                    </div>
+
+                                                </p:panelGrid>
+                                            </h:panelGrid>
+                                        </p:tab>
+                                    </p:tabView>
+
+                                    <div class="center-align">
+                                        <h:commandButton id="registerBtn"
+                                                         value="Register"
+                                                         styleClass="register-button"
+                                                         action="#{registerController.save()}"/>
+                                    </div>
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).on("ready", function () {
+            $('#login-page').css({'height': '100vh'});
+        });
+
+        $("#passwordId, #repasswordId").bind('input', function () {
+
+            var password = document.getElementById("passwordId").value;
+            var rePassword = document.getElementById("repasswordId").value;
+            var registerBtn = document.getElementById("registerBtn");
+            var passwordMatchErrorMsg = document.getElementById("passwordMatchError");
+
+            if (rePassword) {
+                if (password !== rePassword) {
+                    registerBtn.setAttribute("disabled", "disabled");
+                    passwordMatchErrorMsg.setAttribute("style", "display: block; color: red;");
+                } else {
+                    registerBtn.removeAttribute("disabled");
+                    passwordMatchErrorMsg.setAttribute("style", "display: none");
+                }
+            }
+
+        });
+
+
+        function changeGoogleBtnClass() {
+            var googleAuthBtn = document.getElementById("googleAuthBtn");
+            if (googleAuthBtn.classList.contains('google-btn-active')) {
+                googleAuthBtn.setAttribute("style", "background-color: white!important;");
+                googleAuthBtn.classList.remove('google-btn-active');
+                $("#j_idt8\\:googleAuthCB").click();
+            } else {
+                googleAuthBtn.setAttribute("style", "background-color: #dd4b39!important; color: white!important;");
+                googleAuthBtn.classList.add('google-btn-active');
+                $("#j_idt8\\:googleAuthCB").click();
+            }
+        }
+    </script>
+</h:body>
+</html>

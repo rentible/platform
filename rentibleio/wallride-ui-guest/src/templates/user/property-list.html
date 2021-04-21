@@ -1,0 +1,539 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title th:text="${WEBSITE_TITLE}">Title</title>
+    <!--/*/ <th:block th:replace="layout::head-link"> /*/-->
+    <link rel="alternate" type="application/atom+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/atom.xml}"/>
+    <link rel="alternate" type="application/rss+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/rss.xml}"/>
+    <link rel="stylesheet" th:href="@{/resources/bundle.css}" href="/resources/guest/bundle.css"/>
+    <link rel="stylesheet" th:href="@{/resources/search-bar.css}" href="/resources/guest/search-bar.css">
+    <script th:src="@{//code.jquery.com/jquery-1.11.1.min.js}" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script th:src="@{//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js}"
+            src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <!--/*/ </th:block> /*/-->
+    <!--/*/ <th:block th:replace="layout::head-script"> /*/-->
+    <script src="/resources/guest/bundle.js"></script>
+    <!--/*/ </th:block> /*/-->
+    <script th:replace="google-analytics::ga(null)"></script>
+    <!--<script th:src="@{/resources/scripts/datepicker.js}" />-->
+
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+        #map {
+            height: 100vh;
+            margin: -35px -55px -25px 15px;
+            position: fixed !important;
+            width: 50%;
+        }
+    </style>
+
+</head>
+<body>
+<div id="wrap">
+
+    <div th:replace="layout::nav"></div>
+    <div th:replace="layout::postAd"></div>
+    <div class="container">
+        <div class="container text-center">
+            <div class="row">
+                <div class="col-md-12 mt--25">
+                    <!-- <h2 class="search-bar-text" th:text="#{FindRoomsToRent}"></h2> -->
+
+                    <!-- Tab panes -->
+                    <div class="tab-content search-bar-box" id="tabs-collapse">
+                        <form th:action="@{/property-list}" th:object="${form}" method="GET">
+                            <ul class="tab-inner col-sm-12 search-container list-unstyled list-inline">
+                                <li>
+                                    <button type="button" class="btn btn-md search-bar-btn" data-toggle="collapse"
+                                            data-target="#location"
+                                            th:classappend="${activeCity} ? location-btn"
+                                            aria-expanded="false"><span
+                                            th:text="#{Location} + ': ' + ${activeCity.caption}"></span></button>
+                                    <div id="location" class="collapse tab-inner search-dropdown">
+                                        <input type="hidden" th:field="*{city}" th:value="*{city}"/>
+                                        <div id="cityDropdown" class="text-align-left" th:each="city : ${cities}">
+                                            <a style="cursor: pointer;" th:href="@{/property-list(city=${city.id})}"
+                                               th:text="${city.caption}"></a>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <button type="button" id="btnRentPeriod" class="btn btn-md search-bar-btn"
+                                            data-toggle="collapse"
+                                            data-target="#rentPeriods"
+                                            aria-expanded="false">
+                                        <span class="search-text" th:text="#{RentPeriod}"></span>
+                                        <span class="search-content">
+                                         <span id="txtRentPeriod"></span>
+                                       </span>
+                                    </button>
+                                    <div id="rentPeriods" class="collapse tab-inner search-dropdown">
+                                        <div class="text-align-left" th:each="term : ${termOfLease}">
+                                            <input type="checkbox" th:id="${term.id}"
+                                                   th:attr="data-caption=${term.caption}"
+                                                   th:value="${term.id}" th:field="*{termOfLease}"/>
+                                            <label th:for="${term.id}" th:text="${term.caption}"></label>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <button id="btnBudget" type="button" class="btn btn-md search-bar-btn"
+                                            data-toggle="collapse" data-target="#budget" aria-expanded="false">
+                                        <span class="search-text" th:text="#{Budget}"></span>
+                                        <span class="search-content">
+                                         <span id="txtBudgetMin" class="search-currency"></span> - <span
+                                                id="txtBudgetMax" class="search-currency"></span>
+                                       </span>
+                                    </button>
+                                    <div id="budget" class="collapse tab-inner search-dropdown budget">
+                                        <div class="budget-search-item">
+                                            <label th:for="min" th:text="Min"></label>
+                                            <input id="budgetMin" th:field="*{minPrice}" class="search-bar-input"
+                                                   type="text"
+                                                   th:attr="placeholder='Min'"/>
+                                        </div>
+                                        <div class="budget-search-item">
+                                            <label th:for="max" th:text="Max"></label>
+                                            <input id="budgetMax" th:field="*{maxPrice}" class="search-bar-input"
+                                                   type="text"
+                                                   th:attr="placeholder='Max'"/>
+                                        </div>
+                                        <div class="budget-search-item currency">
+                                            <label th:for="budgetCurrency" th:text="#{Currency}"></label>
+                                            <select th:id="budgetCurrency" th:field="*{currency}"
+                                                    class="search-bar-input">
+                                                <option th:each="currency : ${currencies}" th:value="${currency.id}"
+                                                        th:text="${currency.caption}"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <button id="btnFlatmateType" type="button" class="btn btn-md search-bar-btn"
+                                            data-toggle="collapse"
+                                            data-target="#flatmateType"
+                                            aria-expanded="false">
+                                        <span class="search-text" th:text="#{FlatmateType}"></span>
+                                        <span class="search-content">
+                                             <span id="txtFlatmateType"></span>
+                                           </span>
+                                    </button>
+                                    <div id="flatmateType" class="collapse tab-inner search-dropdown">
+                                        <div class="text-align-left" th:each="occupation : ${occupations}">
+                                            <input type="checkbox" th:id="${occupation.caption}"
+                                                   th:attr="data-caption=${occupation.caption}"
+                                                   th:field="*{occupations}"
+                                                   th:value="${occupation.id}"/>
+                                            <label th:for="${occupation.caption}"
+                                                   th:text="${occupation.caption}"></label>
+                                            <hr>
+                                        </div>
+                                        <div class="text-align-left">
+                                            <input type="checkbox" th:id="withPhotos" name="withPhotos[]"
+                                                   th:value="true"/>
+                                            <label th:for="withPhotos" th:text="#{WithPhotos}"></label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <button id="btnPropertySize" type="button" class="btn btn-md search-bar-btn"
+                                            data-toggle="collapse"
+                                            data-target="#propertySize"
+                                            aria-expanded="false">
+                                        <span class="search-text" th:text="#{PropertySize}"></span>
+                                        <span class="search-content">
+                                             <span id="txtPropertySizeMin"></span> - <span
+                                                id="txtPropertySizeMax"></span>
+                                           </span>
+                                    </button>
+                                    <div id="propertySize" class="collapse tab-inner search-dropdown budget">
+                                        <div class="budget-search-item">
+                                            <label th:for="min" th:text="Min"></label>
+                                            <input id="propertySizeMin" th:field="*{propertySizeMin}"
+                                                   class="search-bar-input"
+                                                   type="text"
+                                                   th:attr="placeholder='Min'"/>
+                                        </div>
+                                        <div class="budget-search-item">
+                                            <label th:for="max" th:text="Max"></label>
+                                            <input id="propertySizeMax" th:field="*{propertySizeMax}"
+                                                   class="search-bar-input"
+                                                   type="text"
+                                                   th:attr="placeholder='Max'"/>
+                                        </div>
+                                        <div class="budget-search-item currency">
+                                            <label th:for="type" th:text="#{Type}"></label>
+                                            <select th:id="type" class="search-bar-input">
+                                                <option th:value="Sqm" th:text="#{Sqm}"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <button id="btnBedroom" type="button" class="btn btn-md search-bar-btn"
+                                            data-toggle="collapse"
+                                            data-target="#bedrooms"
+                                            aria-expanded="false">
+                                        <span class="search-text" th:text="#{Bedrooms}"></span>
+                                        <span class="search-content">
+                                             <span id="txtMinBedroom"></span> - <span id="txtMaxBedroom"></span>
+                                           </span>
+                                    </button>
+                                    <div id="bedrooms" class="collapse tab-inner search-dropdown bedrooms p-0-0-15">
+                                        <div class="search-item-bedroom">
+                                            <label th:for="min" th:text="Min"></label>
+                                            <input id="minBedroom" th:field="*{bedroomsMin}" class="search-bar-input"
+                                                   type="text"
+                                                   th:attr="placeholder='Min'"/>
+                                        </div>
+                                        <div class="search-item-bedroom">
+                                            <label th:for="max" th:text="Max"></label>
+                                            <input id="maxBedroom" th:field="*{bedroomsMax}" class="search-bar-input"
+                                                   type="text"
+                                                   th:attr="placeholder='Max'"/>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <button class="btn btn-md search-btn"><span th:text="#{Search}"></span></button>
+                                </li>
+                            </ul>
+
+
+                            <!-- ROOM FORM -->
+                            <div class="col-sm-6 pl-20">
+
+                                <!-- ROOM CONTENT -->
+                                <div th:if="${form.city == 700 || form.city == null}"
+                                     class="row mb-25">
+
+                                    <!-- <div> -->
+                                    <a class="col-sm-6 text-deco-none pr-10" target="_blank"
+                                       th:each="property : ${properties}"
+                                       th:href="@{/property-view(id=${property.id})}">
+                                        <div class="property-card min-height-350">
+                                            <div id="slider">
+                                                <!-- Top part of the slider -->
+                                                <div id="carousel-bounding-box">
+                                                    <div class="carousel slide" id="myCarousel">
+                                                        <!-- Carousel items -->
+                                                        <div class="carousel-inner">
+                                                            <div class="item active property-list-img"
+                                                                 th:style="'background-image:url(' + @{|/media/${property.images[0].filePath}|} + ');'"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="caption property-card-items responsive-property-items text-align-left">
+                                                <p class="property-title" th:text="${property.title}"></p>
+                                                <div class="property-card-item">
+                                                    <p class="property-card-details"
+                                                       th:text="${property.address.city} + ', ' + ${property.address.address1} + ' ' + ${property.address.address2} + ', ' +
+                                                            ${property.apartmentSize} + ' ' +
+                                                            #{Sqm}"
+                                                    ></p>
+                                                </div>
+                                                <div class="property-card-item">
+                                                    <p class="property-card-description"
+                                                       th:text="${property.description}"></p>
+                                                </div>
+
+                                                <div class="property-card-item-price">
+                                                    <p th:if="${property.currencyCaption} == 'EUR'"
+                                                       th:text=" '€' + ' ' +  ${property.rentPrice} + ' / ' + #{Month}"></p>
+                                                    <p th:if="${property.currencyCaption} == 'HUF'"
+                                                       th:text="${property.rentPrice} + ' ' + ${property.currencyCaption} + ' / ' + #{Month}"></p>
+                                                </div>
+
+                                                <div class="property-card-item-icon">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-exchange-alt"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <!-- </div> -->
+                                </div>
+
+                                <!-- ROOM PAGINATOR -->
+                                <div th:if="${form.city == 700 || form.city == null}" class="paginator-container">
+                                    <ul class="pagination pagination-lg">
+                                        <li th:if="${currentPage > 1 and totalPages > 7}" class="page-item">
+                                            <a th:href="@{/property-list(size=${roomAds.size},
+                                                        page=1,
+                                                        city=${form.city},
+                                                        termOfLeases=${form.termOfLease},
+                                                        from=${form.from},
+                                                        currency=${form.currency},
+                                                        minPrice=${form.minPrice},
+                                                        maxPrice=${form.maxPrice})}"
+                                               th:text="1" }
+                                               th:class="pagination-btn"></a>
+                                        </li>
+                                        <li th:if="${currentPage > 2 and totalPages > 7}" class="page-item">
+                                            <span class="pagination-btn">...</span>
+                                        </li>
+                                        <li th:if="${totalPages > 0}" th:each="pageNumber : ${pageNumbers}"
+                                            class="page-item">
+                                            <a th:href="@{/property-list(size=${roomAds.size},
+                                                        page=${pageNumber},
+                                                        city=${form.city},
+                                                        termOfLeases=${form.termOfLease},
+                                                        from=${form.from},
+                                                        currency=${form.currency},
+                                                        minPrice=${form.minPrice},
+                                                        maxPrice=${form.maxPrice})}"
+                                               th:text=${pageNumber}
+                                               th:classappend="${currentPage == pageNumber} ? active-pagination-btn : pagination-btn"></a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div th:if="${form.city == 701 || form.city == 703}" class="alert inactive-info-label">
+                                    <button type="button" class="close" data-dismiss="default" aria-hidden="true">
+                                        &times;
+                                    </button>
+                                    <span th:text="#{LocationInactive}"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div id="map"></div>
+
+                                <script th:inline="javascript">
+                                    /*<![CDATA[*/
+
+                                    function initMap() {
+                                        var myLatLng = /*[[${CenterLatLng}]]*/;
+                                        var googleMapProperties = /*[[${googleMapProperties}]]*/;
+                                        var googleMapPropertiesSize = /*[[${locationsSize}]]*/;
+                                        var map = new google.maps.Map(document.getElementById('map'), {
+                                            zoom: 14,
+                                            center: myLatLng,
+                                            disableDefaultUI: true,
+                                            gestureHandling: 'greedy'
+                                        });
+
+                                        var i;
+
+                                        for (i = 0; i < googleMapPropertiesSize; i++) {
+                                            (function (index) {
+                                                var text;
+                                                if (googleMapProperties[index]['rentPriceCurrency'].toString() == 'EUR') {
+                                                    text = '€ '.concat(googleMapProperties[index]['rentPrice'].toString(), ' / month');
+                                                } else if (googleMapProperties[index]['rentPriceCurrency'].toString() == 'HUF') {
+                                                    text = googleMapProperties[index]['rentPrice'].toString().concat('HUF', '/M');
+                                                }
+
+                                                var markerIcon = {
+                                                    url: "../resources/img/custom-marker-flatshares-round.png",
+                                                    origin: new google.maps.Point(0, 0),
+                                                    labelOrigin: new google.maps.Point(65, 22),
+                                                };
+
+                                                var marker = new google.maps.Marker({
+                                                    position: new google.maps.LatLng(googleMapProperties[index]['lat'], googleMapProperties[index]['lng']),
+                                                    label: {
+                                                        text: text,
+                                                        fontWeight: '600',
+                                                        fontSize: '14px',
+                                                        fontFamily: 'Poppins'
+                                                    },
+                                                    labelOrigin: new google.maps.Point(9, 9),
+                                                    icon: markerIcon,
+                                                    shadow: 'http://www.google.com/mapfiles/arrowshadow.png',
+                                                    map: map
+                                                });
+
+                                                var content = '<div class="pb-10 min-width-250" >' +
+                                                    '<div id="slider">' +
+                                                    '<div id="carousel-bounding-box">' +
+                                                    '<div class="carousel slide" id="myCarousel">' +
+                                                    '<div class="carousel-inner">' +
+                                                    '<div class="item active property-list-img" style="background-image:url(/media/' + googleMapProperties[index]['imgUrl'][0]['filePath'] + ');"></div>' +
+                                                    '</div>' +
+                                                    '</div>' +
+                                                    '</div>' +
+                                                    '</div>' +
+                                                    '<div class="caption responsive-property-items text-align-left ml-10 mt-10">' +
+                                                    '<p class="property-title">' + googleMapProperties[index]['title'] + '</p>' +
+                                                    '<div class="property-card-item">' +
+                                                    '<p class="property-card-item-text">' + googleMapProperties[index]['address'] + ', ' + googleMapProperties[index]['roomSize'] + ' sqm' + '</p>' +
+                                                    '</div>' +
+                                                    '<div class="property-card-item-price" style="top: 6px; right: 25px;">' +
+                                                    '<p>' + googleMapProperties[index]['rentPrice'] + googleMapProperties[index]['currencyCaption'] + ' / Month</p>' +
+                                                    '</div>' +
+                                                    '<div class="property-card-item-icon">' +
+                                                    '<i class="fas fa-star"></i>' +
+                                                    '<i class="fas fa-exchange-alt"></i>' +
+                                                    '</div>' +
+                                                    '</div>' +
+                                                    '</div>';
+
+                                                marker.addListener('click', function () {
+                                                    new google.maps.InfoWindow({
+                                                        content: content,
+                                                        maxWidth: 270,
+                                                        maxHeight: 370
+                                                    }).open(map, marker);
+                                                });
+                                            })(i);
+                                        }
+
+                                        $(document).click(function (e) {
+                                            if ($(e.target).is('.row, .col-md-12, .search-bar-btn')) {
+                                                $('.collapse').collapse('hide');
+                                            }
+                                        });
+
+                                        $('.search-bar-btn').click(function (e) {
+                                            $('.collapse').collapse('hide');
+                                        });
+
+
+                                    }
+
+                                    $(document).ready(function () {
+                                        $('#btnBudget').toggleClass('search-active', !!($('#budgetMin').val() || $('#budgetMax').val()));
+                                        $('#txtBudgetMin').text($('#budgetMin').val());
+                                        $('#txtBudgetMax').text($('#budgetMax').val());
+
+                                        $('#btnPropertySize').toggleClass('search-active', !!($('#propertySizeMin').val() || $('#propertySizeMax').val()));
+                                        if ($('#propertySizeMin').val() != "") {
+                                            $('#txtPropertySizeMin').text($('#propertySizeMin').val() + ' sqm');
+                                        }
+                                        if ($('#propertySizeMax').val() != "") {
+                                            $('#txtPropertySizeMax').text($('#propertySizeMax').val() + ' sqm');
+                                        }
+
+                                        $('#btnBedroom').toggleClass('search-active', !!($('#minBedroom').val() || $('#maxBedroom').val()));
+                                        $('#txtMinBedroom').text($('#minBedroom').val());
+                                        $('#txtMaxBedroom').text($('#maxBedroom').val());
+
+
+                                        var terms = [
+                                            /*[# th:each="period : ${selectedRentPeriods}"]*/
+                                            /*[[${period}]]*/,
+                                            /*[/]*/
+                                        ];
+                                        var selectedPeriods = [];
+
+                                        for (i = 0; i < terms.length; i++) {
+                                            var caption = terms[i];
+                                            selectedPeriods.push(caption);
+                                            $('#txtRentPeriod').text(selectedPeriods.join(', '));
+                                            $('#btnRentPeriod').toggleClass('search-active', !!selectedPeriods.length);
+                                        }
+
+                                        var occupations = [
+                                            /*[# th:each="occupation : ${selectedOccupations}"]*/
+                                            /*[[${occupation}]]*/,
+                                            /*[/]*/
+                                        ];
+                                        var selectedOccupations = [];
+
+                                        for (i = 0; i < occupations.length; i++) {
+                                            var caption = occupations[i];
+                                            selectedOccupations.push(caption);
+                                            $('#txtFlatmateType').text(selectedOccupations.join(', '));
+                                            $('#btnFlatmateType').toggleClass('search-active', !!selectedOccupations.length);
+                                        }
+
+                                    });
+
+                                    $('#budgetMin, #budgetMax').on('input', function (e) {
+                                        $('#btnBudget').toggleClass('search-active', !!($('#budgetMin').val() || $('#budgetMax').val()));
+                                        $('#txtBudgetMin').text($('#budgetMin').val());
+                                        $('#txtBudgetMax').text($('#budgetMax').val());
+                                    });
+
+                                    $('#propertySizeMin, #propertySizeMax').on('input', function (e) {
+                                        $('#btnPropertySize').toggleClass('search-active', !!($('#propertySizeMin').val() || $('#propertySizeMax').val()));
+                                        if ($('#propertySizeMin').val() != "") {
+                                            $('#txtPropertySizeMin').text($('#propertySizeMin').val() + ' sqm');
+                                        }
+                                        if ($('#propertySizeMax').val() != "") {
+                                            $('#txtPropertySizeMax').text($('#propertySizeMax').val() + ' sqm');
+                                        }
+                                    });
+
+                                    $('#minBedroom, #maxBedroom').on('input', function (e) {
+                                        $('#btnBedroom').toggleClass('search-active', !!($('#minBedroom').val() || $('#maxBedroom').val()));
+                                        $('#txtMinBedroom').text($('#minBedroom').val());
+                                        $('#txtMaxBedroom').text($('#maxBedroom').val());
+                                    });
+
+                                    var currencyMap = {
+                                        /*[# th:each="currency : ${currencies}"]*/
+                                        /*[[${currency.id}]]:[[${currency.caption}]]*/,
+                                        /*[/]*/
+                                        };
+
+
+                                    $('#budgetCurrency').on('input', function (e) {
+                                        var value = $(e.target).val();
+                                        var currencyCaption = currencyMap[value].toLowerCase();
+                                        $("#btnBudget").removeClass(function (index, className) {
+                                            return (className.match(/(^|\s)search-currency-\S+/g) || []).join(' ');
+                                        }).addClass('search-currency-' + currencyCaption);
+
+                                    });
+
+                                    $("#btnBudget").addClass('search-currency-' + currencyMap[$('#budgetCurrency').val()].toLowerCase());
+
+                                    var selectedPeriods = [];
+                                    $("#rentPeriods input").on('input', function (e) {
+                                        var caption = $(e.target).data("caption");
+                                        if ($(e.target).is(':checked')) {
+                                            selectedPeriods.push(caption);
+                                        } else {
+                                            var index = selectedPeriods.indexOf(caption);
+                                            if (index > -1) {
+                                                selectedPeriods.splice(index, 1);
+                                            }
+                                        }
+                                        $('#txtRentPeriod').text(selectedPeriods.join(', '));
+                                        $('#btnRentPeriod').toggleClass('search-active', !!selectedPeriods.length);
+                                    });
+
+                                    var selectedFlatmateType = [];
+                                    $("#flatmateType input").on('input', function (e) {
+                                        var caption = $(e.target).data("caption");
+                                        if ($(e.target).is(':checked')) {
+                                            selectedFlatmateType.push(caption);
+                                        } else {
+                                            var index = selectedFlatmateType.indexOf(caption);
+                                            if (index > -1) {
+                                                selectedFlatmateType.splice(index, 1);
+                                            }
+                                        }
+                                        $('#txtFlatmateType').text(selectedFlatmateType.join(', '));
+                                        $('#btnFlatmateType').toggleClass('search-active', !!selectedFlatmateType.length);
+                                    });
+
+                                    /*]]>*/
+                                </script>
+
+                                <!-- Google Map Script -->
+                                <script async="async" defer="defer"
+                                        th:src="@{|https://maps.googleapis.com/maps/api/js?key=${googleApiKey}&callback=initMap|}"></script>
+
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <div th:replace="layout::footer" id="footer"></div> -->
+</body>
+</html>

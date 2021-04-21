@@ -1,0 +1,42 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="template.xhtml">
+
+    <ui:define name="implementation">
+        <div>
+            <h2>Email Templates</h2>
+            <h:form>
+                <p:dataTable var="e" value="#{emailTemplatePaginator.model}"
+                             rows="10"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             lazy="true"
+                             rowsPerPageTemplate="5,10,25">
+
+                    <p:column headerText="Id" filterBy="#{e.id}" filterMatchMode="contains">
+                        <h:outputText value="#{e.id}"/>
+                    </p:column>
+
+                    <p:column headerText="Template code" filterBy="#{e.templCode}" filterMatchMode="contains">
+                        <h:outputText value="#{e.templCode}"/>
+                    </p:column>
+
+                    <p:column headerText="Content">
+                        <h:outputText value="#{e.content}"/>
+                    </p:column>
+
+                    <p:column headerText="Subject">
+                        <h:outputText value="#{e.subject}"/>
+                    </p:column>
+
+                    <p:column headerText="Enabled">
+                        <h:outputText value="#{e.enabled}"/>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

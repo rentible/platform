@@ -1,0 +1,716 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description"/>
+    <meta name="keywords"/>
+    <meta name="author" content=""/>
+    <title>Profile</title>
+    <!--/*/ <th:block th:replace="layout::head-link"> /*/-->
+    <link rel="alternate" type="application/atom+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/atom.xml}"/>
+    <link rel="alternate" type="application/rss+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/rss.xml}"/>
+    <link rel="stylesheet" th:href="@{/resources/bundle.css}" href="/resources/guest/bundle.css"/>
+    <script th:src="@{//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js}"
+            src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <!--/*/ </th:block> /*/-->
+    <!--/*/ <th:block th:replace="layout::head-script"> /*/-->
+    <script th:src="@{/resources/bundle.js}" src="/resources/guest/bundle.js"></script>
+    <!--/*/ </th:block> /*/-->
+    <script th:replace="google-analytics::ga(null)"></script>
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+        #map {
+            height: 30vh;
+            border-radius: 20px;
+            margin-top: 25px;
+        }
+
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <div th:replace="layout::nav"></div>
+    <div th:replace="layout::postAd"></div>
+    <div class="container l-5-vw r-5-vw">
+        <div class="row">
+
+            <div class="col-sm-3 min-height-95vh">
+                <img th:src="${profilePicturePath}"
+                     class="profile-img height-200">
+                <div th:replace="layout::profile"></div>
+            </div>
+
+            <section class="col-sm-9">
+                <h3 id="adTitle" th:text="#{RoomToLet}"></h3>
+                <div class="wizard">
+                    <div class="wizard-inner">
+                        <div class="connecting-line"></div>
+                        <ul class="nav nav-tabs" role="tablist">
+
+                            <li role="presentation" class="active">
+                                <a>
+                                  <span class="round-tab" th:classappend="${step >= 1} ? step-active">
+                                      1
+                                  </span>
+                                </a>
+                                <span class="ad-custom-font" th:classappend="${step >= 1} ? step-active-font"
+                                      th:text="#{Location}"></span>
+                            </li>
+                            <div th:classappend="${step >= 2} ? active"
+                                 class="sm-connecting-line col-sm-2 col-sm-offset-1"></div>
+
+                            <li role="presentation" class="disabled">
+                                <a>
+                                  <span class="round-tab" th:classappend="${step >= 2} ? step-active">
+                                      2
+                                  </span>
+                                </a>
+                                <span class="ad-custom-font" th:classappend="${step >= 2} ? step-active-font"
+                                      th:text="#{AboutTheRoom}"></span>
+                            </li>
+                            <div style="left: 50px;" th:classappend="${step >= 3} ? active"
+                                 class="sm-connecting-line col-sm-2 col-sm-offset-3"></div>
+
+                            <li role="presentation" class="disabled">
+                                <a href="#details" data-toggle="tab" aria-controls="details" role="tab" title="Step 3">
+                                            <span class="round-tab" th:classappend="${step >= 3} ? step-active">
+                                                3
+                                            </span>
+                                </a>
+                                <span class="ad-custom-font" th:classappend="${step >= 3} ? step-active-font"
+                                      th:text="#{AboutMeOrAboutFlatmate}"></span>
+                            </li>
+                            <div th:classappend="${step >= 4} ? active"
+                                 class="sm-connecting-line col-sm-2 col-sm-offset-6"></div>
+
+                            <li role="presentation" class="disabled">
+                                <a href="#complete" data-toggle="tab" aria-controls="complete" role="tab"
+                                   title="Step 4">
+                                            <span class="round-tab" th:classappend="${step >= 4} ? step-active">
+                                                4
+                                            </span>
+                                </a>
+                                <span class="ad-custom-font" th:classappend="${step >= 4} ? step-active-font"
+                                      th:text="#{PhotosAndDescription}"></span>
+                            </li>
+                            <div style="left: 40px;" th:classappend="${step >= 5} ? active"
+                                 class="sm-connecting-line col-sm-2 col-sm-offset-8"></div>
+
+                            <li role="presentation" class="disabled">
+                                <a href="#complete" data-toggle="tab" aria-controls="complete" role="tab"
+                                   title="Step 5">
+                                            <span class="round-tab" th:classappend="${step >= 5} ? step-active">
+                                                5
+                                            </span>
+                                </a>
+                                <span class="ad-custom-font" th:classappend="${step >= 5} ? step-active-font"
+                                      th:text="#{PromoteYourAd}"></span>
+                            </li>
+                        </ul>
+                        <hr>
+                    </div>
+
+                    <script th:inline="javascript">
+                        $(document).ready(function () {
+
+                            //Initialize tooltips
+                            $('.nav-tabs > li a[title]').tooltip();
+
+                            //Wizard
+                            $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+                                console.log(e);
+                                var $target = $(e.target);
+
+                                if ($target.parent().hasClass('disabled')) {
+                                    return false;
+                                }
+                                $('.tab-pane.active').removeClass('active');
+                            });
+
+                            $(".next-step").click(function (e) {
+
+                                var $active = $('.wizard .nav-tabs li.active');
+                                $active.next().removeClass('disabled');
+                                nextTab($active);
+
+                            });
+                            $(".prev-step").click(function (e) {
+
+                                var $active = $('.wizard .nav-tabs li.active');
+                                prevTab($active);
+
+                            });
+                        });
+
+                        function nextTab(elem) {
+                            $(elem).next().find('a[data-toggle="tab"]').click();
+                        }
+
+                        function prevTab(elem) {
+                            $(elem).prev().find('a[data-toggle="tab"]').click();
+                        }
+
+                    </script>
+
+
+                    <form th:if="${step eq 1}" class="col-sm-12" th:action="@{/post-room-ad/step-2}"
+                          th:object="${adStepOneForm}" method="post" role="adStepOneForm">
+                        <div>
+                            <p class="alert alert-danger" th:if="${#fields.hasErrors('all')}" th:text="#{Error}">
+                                Error</p>
+                            <div>
+                                <input type="hidden" th:field="*{step}">
+                                <div class="col-sm-8 top-space"
+                                     th:classappend="${#fields.hasErrors('city')}? has-error">
+                                    <label class="control-label ad-custom-font" th:text="#{City}"></label>
+                                    <select id="city" th:field="*{city}" class="custom-input form-control col-sm-12">
+                                        <option th:each="city : ${cities}" th:value="${city.id}"
+                                                th:text="${city.caption}"></option>
+                                    </select>
+                                    <span class="help-block" th:each="err : ${#fields.errors('city')}"
+                                          th:text="${err}"/>
+                                </div>
+                                <div class="col-sm-4 top-space"
+                                     th:classappend="${#fields.hasErrors('district')}? has-error">
+                                    <label class="control-label ad-custom-font" th:text="#{District}"></label>
+                                    <select th:field="*{district}" class="custom-input form-control col-sm-12">
+                                        <option th:each="district : ${districts}" th:value="${district.id}"
+                                                th:text="${district.caption}"></option>
+                                    </select>
+                                    <span class="help-block" th:each="err : ${#fields.errors('district')}"
+                                          th:text="${err}"/>
+                                </div>
+                                <div class="col-sm-12 top-space"
+                                     th:classappend="${#fields.hasErrors('street')}? has-error">
+                                    <label class="control-label ad-custom-font" th:text="#{Street}"></label>
+                                    <input id="addressAutocomplete" type="text" class="custom-input form-control"
+                                           th:attr="placeholder=#{Street}" autocomplete="off" spellcheck="false"/>
+                                    <span class="help-block" th:each="err : ${#fields.errors('street')}"
+                                          th:text="${err}"/>
+                                </div>
+                                <input id="street" type="hidden" th:field="*{street}">
+                                <input id="streetNumber" type="hidden" th:field="*{streetNumber}">
+                                <input id="zipCode" type="hidden" th:field="*{zipCode}">
+                                <input id="cityCaption" type="hidden" th:field="*{cityCaption}">
+
+                                <div class="col-sm-12" id="map"></div>
+                                <script th:inline="javascript">
+                                    /*<![CDATA[*/
+
+                                    function initMap() {
+                                        var latLngHun = /*[[${latLngHun}]]*/;
+                                        var latLngGbr = /*[[${latLngGbr}]]*/;
+                                        var latLngNl = /*[[${latLngNl}]]*/;
+
+                                        var centerLatLng;
+
+                                        $('#city').change(function () {
+                                            console.log($(this).val());
+                                            if ($(this).val() == 700) centerLatLng = latLngHun;
+                                            if ($(this).val() == 701) centerLatLng = latLngGbr;
+                                            if ($(this).val() == 703) centerLatLng = latLngNl;
+                                        });
+
+                                        // centerLatLng = new google.maps.LatLng(latLngHun['lat'], latLngHun['lng']);
+
+                                        centerLatLng = latLngHun;
+
+                                        var map = new google.maps.Map(document.getElementById('map'), {
+                                            zoom: 14,
+                                            center: centerLatLng,
+                                            disableDefaultUI: true,
+                                            gestureHandling: 'greedy'
+                                        });
+
+                                        var marker = new google.maps.Marker({
+                                            map: map,
+                                            anchorPoint: new google.maps.Point(0, -29)
+                                        });
+
+                                        var input = document.getElementById("addressAutocomplete");
+                                        var autocomplete = new google.maps.places.Autocomplete(input);
+                                        // Set the data fields to return when the user selects a place.
+                                        autocomplete.setFields(['address_components', 'geometry', 'icon', 'name']);
+
+                                        autocomplete.addListener('place_changed', function () {
+                                            marker.setVisible(false);
+                                            var place = autocomplete.getPlace();
+                                            if (!place.geometry) {
+                                                // User entered the name of a Place that was not suggested and
+                                                // pressed the Enter key, or the Place Details request failed.
+                                                return;
+                                            }
+
+                                            // If the place has a geometry, then present it on a map.
+                                            if (place.geometry.viewport) {
+                                                map.fitBounds(place.geometry.viewport);
+                                            } else {
+                                                map.setCenter(place.geometry.location);
+                                                map.setZoom(17);  // Why 17? Because it looks good.
+                                            }
+                                            marker.setPosition(place.geometry.location);
+                                            marker.setVisible(true);
+
+                                            var address = '';
+                                            if (place.address_components) {
+                                                address = [
+                                                    (place.address_components[0] && place.address_components[0].short_name || ''),
+                                                    (place.address_components[1] && place.address_components[1].short_name || ''),
+                                                    (place.address_components[2] && place.address_components[2].short_name || '')
+                                                ].join(' ');
+                                            }
+
+                                            $('#streetNumber').val(place.address_components[0].short_name);
+                                            $('#street').val(place.address_components[1].short_name);
+                                            $('#cityCaption').val(place.address_components[3].short_name);
+                                            $('#zipCode').val(place.address_components[5].short_name);
+
+                                            console.log(place.address_components);
+
+                                        });
+
+                                    }
+
+
+                                    /*]]>*/
+
+
+                                </script>
+
+                                <!-- Google Map Script -->
+                                <script async="async" defer="defer"
+                                        th:src="@{|https://maps.googleapis.com/maps/api/js?key=${googleApiKey}&libraries=places&callback=initMap|}"></script>
+
+                                <hr>
+                                <ul class="list-inline pull-right">
+                                    <li>
+                                        <button class="default-flatshares-btn-next col-sm-4 col-sm-offset-4 next-step"
+                                                th:text="#{NextStep}">
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                    </form>
+                    <form class="col-sm-12" th:action="@{/post-room-ad/step-3}" th:object="${adStepTwoForm}"
+                          method="post"
+                          role="adStepTwoForm">
+                        <div th:if="${step == 2}" class="tab-pane" id="roomDetails">
+                            <p class="alert alert-danger" th:if="${#fields.hasErrors('all')}" th:text="#{Error}">
+                                Error</p>
+                            <input type="hidden" th:field="*{step}">
+                            <input type="hidden" th:field="*{propertyId}">
+                            <div class="col-sm-12 input-container"
+                                 th:classappend="${#fields.hasErrors('title')}? has-error">
+                                <span class="col-sm-4 flatshares-font" th:text="#{ListingTitle}"></span>
+                                <input type="text" th:field="*{title}" class="custom-input col-sm-8"
+                                       th:attr="placeholder=#{ListingTitlePlaceholder}" autocomplete="off"/>
+                                <span class="help-block col-sm-8 col-sm-offset-4"
+                                      th:each="err : ${#fields.errors('title')}" th:text="${err}"/>
+                            </div>
+                            <div class="col-sm-12" th:classappend="${#fields.hasErrors('rentPrice')}? has-error">
+                                <div style="top: 10px;" class="col-sm-4">
+                                    <span class="flatshares-font" th:text="#{RentPerMonth}"></span>
+                                    <span class="not-null flatshares-font" th:text="'*'"></span>
+                                </div>
+                                <input type="text" th:field="*{rentPrice}" class="col-sm-2 custom-input"
+                                       autocomplete="off"/>
+                                <select th:field="*{rentPriceCurrency}" class="custom-input col-sm-2 col-sm-offset-1">
+                                    <option th:each="currency : ${currencies}" th:value="${currency.id}"
+                                            th:text="${currency.caption}"></option>
+                                </select>
+                                <span class="help-block col-sm-8 col-sm-offset-4"
+                                      th:each="err : ${#fields.errors('rentPrice')}" th:text="${err}"/>
+                            </div>
+                            <div class="col-sm-12" th:classappend="${#fields.hasErrors('deposit')}? has-error">
+                                <span class="col-sm-4 flatshares-font" th:text="#{Deposit}"></span>
+                                <input type="text" th:field="*{deposit}" class="col-sm-2 custom-input"
+                                       autocomplete="off"/>
+                                <select th:field="*{depositCurrency}" class="custom-input col-sm-2 col-sm-offset-1">
+                                    <option th:each="currency : ${currencies}" th:value="${currency.id}"
+                                            th:text="${currency.caption}"></option>
+                                </select>
+                                <span class="help-block col-sm-8 col-sm-offset-4"
+                                      th:each="err : ${#fields.errors('deposit')}" th:text="${err}"/>
+                            </div>
+                            <div class="col-sm-12" th:classappend="${#fields.hasErrors('roomSize')}? has-error">
+                                <span class="col-sm-4 flatshares-font" th:text="#{SizeOfTheRoom}"></span>
+                                <input type="text" th:field="*{roomSize}" class="col-sm-2 custom-input"
+                                       autocomplete="off"/>
+                                <span class="col-sm-2 col-sm-offset-1 flatshares-font" th:text="#{Sqm}"></span>
+                                <span class="help-block col-sm-8 col-sm-offset-4"
+                                      th:each="err : ${#fields.errors('roomSize')}" th:text="${err}"/>
+                            </div>
+                            <div class="col-sm-12" th:classappend="${#fields.hasErrors('apartmentSize')}? has-error">
+                                <span class="col-sm-4 flatshares-font" th:text="#{SizeOfTheApartment}"></span>
+                                <input type="text" th:field="*{apartmentSize}" class="col-sm-2 custom-input"
+                                       autocomplete="off"/>
+                                <span class="col-sm-2 col-sm-offset-1 flatshares-font" th:text="#{Sqm}"></span>
+                                <span class="help-block col-sm-8 col-sm-offset-4"
+                                      th:each="err : ${#fields.errors('apartmentSize')}" th:text="${err}"/>
+                            </div>
+                            <div class="col-sm-12" th:classappend="${#fields.hasErrors('flatmatesNumber')}? has-error">
+                                <div class="col-sm-4 mt-10">
+                                    <span class="flatshares-font" th:text="#{TotalNumberOfFlatmates}"></span>
+                                    <span class="not-null flatshares-font" th:text="'*'"></span>
+                                </div>
+                                <input type="text" th:field="*{flatmatesNumber}" class="col-sm-2 custom-input"
+                                       autocomplete="off"/>
+                                <span class="help-block col-sm-8 col-sm-offset-4"
+                                      th:each="err : ${#fields.errors('flatmatesNumber')}" th:text="${err}"/>
+                            </div>
+
+                            <div class="col-sm-12" th:classappend="${#fields.hasErrors('roommatesNumber')}? has-error">
+                                <div class="col-sm-4 mt-10">
+                                    <span class="flatshares-font" th:text="#{TotalNumberOfRoommates}"></span>
+                                    <span class="not-null flatshares-font" th:text="'*'"></span>
+                                </div>
+                                <input type="text" th:field="*{roommatesNumber}" class="col-sm-2 custom-input"
+                                       autocomplete="off"/>
+                                <span class="help-block col-sm-8 col-sm-offset-4"
+                                      th:each="err : ${#fields.errors('roommatesNumber')}" th:text="${err}"/>
+                            </div>
+
+                            <div class="col-sm-12" th:classappend="${#fields.hasErrors('bedsNumber')}? has-error">
+                                <div class="col-sm-4 mt-10">
+                                    <span class="flatshares-font" th:text="#{BedsInTheRoom}"></span>
+                                    <span class="not-null flatshares-font" th:text="'*'"></span>
+                                </div>
+                                <input type="text" th:field="*{bedsNumber}" class="col-sm-2 custom-input"
+                                       autocomplete="off"/>
+                                <span class="help-block col-sm-8 col-sm-offset-4"
+                                      th:each="err : ${#fields.errors('bedsNumber')}" th:text="${err}"/>
+                            </div>
+
+                            <div class="col-sm-12" th:classappend="${#fields.hasErrors('flatmatesNumber')}? has-error">
+                                <span class="col-sm-4 flatshares-font" th:text="#{BathroomsInTheApartment}"></span>
+                                <div class="col-sm-8">
+                                    <div class="col-sm-6 input-container d-flex"
+                                         th:each="bathroom : ${bathrooms}">
+                                        <input type="checkbox" th:id="${bathroom.caption}" th:field="*{bathrooms}"
+                                               th:value="${bathroom.id}"/>
+                                        <label th:for="${bathroom.caption}" th:text="${bathroom.caption}"></label>
+                                        <span class="help-block col-sm-8 col-sm-offset-4"
+                                              th:each="err : ${#fields.errors('bathrooms')}" th:text="${err}"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12" th:classappend="${#fields.hasErrors('numberOfToilets')}? has-error">
+                            <span class="col-sm-4 flatshares-font"
+                                  th:text="#{NumberOfToiletsInThisApartment}"></span>
+                                <input type="text" th:field="*{numberOfToilets}" class="col-sm-2 custom-input"
+                                       autocomplete="off"/>
+                                <span class="help-block col-sm-8 col-sm-offset-4"
+                                      th:each="err : ${#fields.errors('numberOfToilets')}" th:text="${err}"/>
+                            </div>
+
+                            <div class="col-sm-12" th:classappend="${#fields.hasErrors('termOfLease')}? has-error">
+                                <div style="top: 10px;" class="col-sm-4">
+                                    <span class="flatshares-font" th:text="#{TermOfLease}"></span>
+                                    <span class="not-null flatshares-font" th:text="'*'"></span>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="col-sm-6 input-container d-flex"
+                                         th:each="term : ${termOfLease}">
+                                        <input type="checkbox" th:id="${term.caption}" th:field="*{termOfLease}"
+                                               th:value="${term.id}"/>
+                                        <label th:for="${term.caption}" th:text="${term.caption}"></label>
+                                        <span class="help-block col-sm-8 col-sm-offset-4"
+                                              th:each="err : ${#fields.errors('termOfLease')}" th:text="${err}"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12" th:classappend="${#fields.hasErrors('availableFrom')}? has-error">
+                                <div style="top: 10px;" class="col-sm-4">
+                                    <span class="flatshares-font" th:text="#{AvailableFrom}"></span>
+                                    <span class="not-null flatshares-font" th:text="'*'"></span>
+                                </div>
+                                <input th:field="*{availableFrom}" class="col-sm-4 custom-input" type="date"/>
+                                <span class="help-block col-sm-8 col-sm-offset-4"
+                                      th:each="err : ${#fields.errors('availableFrom')}" th:text="${err}"/>
+                            </div>
+
+                            <hr>
+
+                            <div class="col-sm-12" th:classappend="${#fields.hasErrors('floor')}? has-error">
+                                <div style="top: 10px;" class="col-sm-4">
+                                    <span class="flatshares-font" th:text="#{Floor}"></span>
+                                    <span class="not-null flatshares-font" th:text="'*'"></span>
+                                </div>
+                                <select th:field="*{floor}" class="custom-input col-sm-8">
+                                    <option th:each="floor : ${floors}" th:value="${floor.id}"
+                                            th:text="${floor.caption}"></option>
+                                </select>
+                                <span class="help-block col-sm-8 col-sm-offset-4"
+                                      th:each="err : ${#fields.errors('floor')}" th:text="${err}"/>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <span class="col-sm-4 flatshares-font" th:text="#{Elevator}"></span>
+                                <select th:field="*{hasElevator}" class="custom-input col-sm-8">
+                                    <option th:value="true" th:text="Yes"></option>
+                                    <option th:value="false" th:text="No"></option>
+                                </select>
+                                <span class="help-block col-sm-8 col-sm-offset-4"
+                                      th:each="err : ${#fields.errors('hasElevator')}" th:text="${err}"/>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div style="top: 10px;" class="col-sm-4">
+                                    <span class="flatshares-font" th:text="#{NearToMetroOrTram}"></span>
+                                    <span class="not-null flatshares-font" th:text="'*'"></span>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="col-sm-6 input-container d-flex"
+                                         th:each="PT : ${publicTransportHU}">
+                                        <input type="checkbox" th:id="${PT.caption}" th:field="*{publicTransports}"
+                                               th:value="${PT.id}"/>
+                                        <label th:for="${PT.caption}" th:text="${PT.caption}"></label>
+                                        <span class="help-block col-sm-8 col-sm-offset-4"
+                                              th:each="err : ${#fields.errors('publicTransports')}" th:text="${err}"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 input-container">
+                                <span class="col-sm-4 flatshares-font" th:text="#{DistanceToPublicTransport}"></span>
+                                <input type="text" th:field="*{distanceToPublicTransport}" class="col-sm-2 custom-input"
+                                       autocomplete="off"/>
+                                <span class="col-sm-2 col-sm-offset-1 flatshares-font" th:text="#{Min}"></span>
+                                <span class="help-block col-sm-8 col-sm-offset-4"
+                                      th:each="err : ${#fields.errors('distanceToPublicTransport')}" th:text="${err}"/>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div style="top: 10px;" class="col-sm-4">
+                                    <span class="flatshares-font" th:text="#{Surroundings}"></span>
+                                    <span class="not-null flatshares-font" th:text="'*'"></span>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="col-sm-6 input-container d-flex"
+                                         th:each="surrounding : ${surroundings}">
+                                        <input type="checkbox" th:id="${surrounding.caption}" th:field="*{surroundings}"
+                                               th:value="${surrounding.id}"/>
+                                        <label th:for="${surrounding.caption}" th:text="${surrounding.caption}"></label>
+                                        <span class="help-block col-sm-8 col-sm-offset-4"
+                                              th:each="err : ${#fields.errors('surroundings')}" th:text="${err}"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="col-sm-4">
+                                    <span class="flatshares-font" th:text="#{SmokingInTheHouse}"></span>
+                                    <span class="not-null flatshares-font" th:text="'*'"></span>
+                                </div>
+                                <div class="col-sm-4 input-container d-flex">
+                                    <input type="radio" th:id="smokingNotAllowed" th:field="*{isSmokingAllowed}"
+                                           th:value="false"/>
+                                    <label th:for="smokingNotAllowed" class="m-5"
+                                           th:text="#{NotAllowed}"></label>
+                                </div>
+                                <div class="col-sm-4 input-container d-flex">
+                                    <input type="radio" th:id="smokingAllowed" th:field="*{isSmokingAllowed}"
+                                           th:value="true"/>
+                                    <label class="m-5" th:for="smokingAllowed" th:text="#{Allowed}"></label>
+                                </div>
+                            </div>
+                            <ul class="list-inline pull-right">
+                                <li>
+                                    <button class="default-flatshares-btn-next col-sm-4 col-sm-offset-4 next-step"
+                                            th:text="#{NextStep}">
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+
+                    <form class="col-sm-12" th:action="@{/post-room-ad/step-4}"
+                          th:object="${flatmatePreferencesForm}" method="post" role="flatmatePreferencesForm">
+                        <div th:if="${step == 3}" class="tab-pane" role="tabpanel" id="flatmatePreferences">
+                            <h3 th:text="#{AboutMyFlatmate}"></h3>
+                            <input type="hidden" th:field="*{step}">
+                            <input type="hidden" th:field="*{propertyId}">
+                            <div class="col-sm-12">
+                                <div class="col-sm-4">
+                                    <span class="flatshares-font" th:text="#{Age}"></span>
+                                </div>
+                                <input type="text" th:attr="placeholder=#{From}" class="col-sm-2 custom-input"
+                                       th:field="*{ageFrom}"/>
+                                <input type="text" th:attr="placeholder=#{To}"
+                                       class="col-sm-2 col-sm-offset-1 custom-input"
+                                       th:field="*{ageTo}"/>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="col-sm-4">
+                                    <span class="flatshares-font" th:text="#{Gender}"></span>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="col-sm-6 input-container" th:each="gender : ${genders}">
+                                        <input type="checkbox" th:id="${gender.caption}" th:field="*{gender}"
+                                               th:value="${gender.id}"/>
+                                        <label th:for="${gender.caption}" th:text="${gender.caption}"></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="col-sm-4">
+                                    <span class="flatshares-font" th:text="#{Occupation}"></span>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="col-sm-6 input-container d-flex"
+                                         th:each="occupation : ${occupations}">
+                                        <input type="checkbox" th:id="${occupation.caption}" th:field="*{occupation}"
+                                               th:value="${occupation.id}"/>
+                                        <label th:for="${occupation.caption}" th:text="${occupation.caption}"></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="col-sm-4">
+                                    <span class="flatshares-font" th:text="#{StudiesAt}"></span>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="col-sm-6 input-container d-flex"
+                                         th:each="university : ${universities}">
+                                        <input type="checkbox" th:id="${university.caption}" th:field="*{university}"
+                                               th:value="${university.id}"/>
+                                        <label th:for="${university.caption}" th:text="${university.caption}"></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="col-sm-4">
+                                    <span class="flatshares-font" th:text="#{Speaks}"></span>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="col-sm-6 input-container d-flex"
+                                         th:each="language : ${languages}">
+                                        <input type="checkbox" th:id="${language.caption}" th:field="*{languages}"
+                                               th:value="${language.id}"/>
+                                        <label th:for="${language.caption}" th:text="${language.caption}"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul class="list-inline pull-right">
+                                <li>
+                                    <button class="default-flatshares-btn-next col-sm-4 col-sm-offset-4 next-step"
+                                            th:text="#{NextStep}">
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+
+                    <form th:if="${step eq 4}" class="col-sm-12" th:action="@{/post-room-ad/images}"
+                          th:object="${form}" method="post" role="form" enctype="multipart/form-data">
+                        <input type="hidden" th:field="*{step}">
+                        <input type="hidden" th:field="*{propertyId}">
+                        <div id="photos">
+                            <h3 th:text="#{UploadPhotos}"></h3>
+                            <div class="col-sm-12 ad-photos-box">
+                                <div class="upload-photos-header" th:text="#{UploadImagesOfYourApartment}"></div>
+                                <div class="upload-photos-body">
+                                    <div class="col-sm-3" th:each="imageUrl : ${imageUrls}">
+
+                                        <!--<div class="thumbnail upload-image-thumbnail">
+                                            <img style="height: 100px;" th:src="@{|/media/${imageUrl}|}">
+                                        </div>-->
+
+                                        <div id="slider">
+                                            <!-- Top part of the slider -->
+                                            <div id="carousel-bounding-box">
+                                                <div class="carousel slide" id="myCarousel">
+                                                    <!-- Carousel items -->
+                                                    <div class="carousel-inner">
+                                                        <div class="item active thumbnail upload-image-thumbnail"
+                                                             th:style="'background-image:url(' + @{|/media/${imageUrl}|} + '); height: 110px;'"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <label class="thumbnail upload-image-thumbnail col-sm-2">
+                                        <i class="fas fa-plus fa-5x"></i>
+                                        <input type="file" name="file" id="file" style="display: none;">
+                                    </label>
+
+                                    <!-- <div th:if="!${imageUrls}" class="upload-images-placeholder">
+                                        <i class="far fa-images fa-6x"></i>
+                                    </div> -->
+                                </div>
+                                <input type="hidden" name="_method" value="put"/>
+                                <div class="upload-photos-footer">
+                                    <div>
+                                        <button><span th:text="#{Upload}"></span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form th:if="${step eq 4}" class="col-sm-12" th:action="@{/post-room-ad/step-5}"
+                          th:object="${form}" method="post"
+                          role="form">
+                        <input type="hidden" th:field="*{step}">
+                        <input type="hidden" th:field="*{propertyId}">
+                        <h3 class="float-left mt-50" th:text="#{Description}"></h3>
+                        <div class="col-sm-12 p-0">
+                        <textarea class="custom-input height-150 width-100" rows="4" cols="50"
+                                  th:attr="placeholder=#{AboutMe}" th:field="*{description}"></textarea>
+                        </div>
+                        <ul class="list-inline pull-right">
+                            <li>
+                                <button class="default-flatshares-btn-next col-sm-4 col-sm-offset-4 next-step"
+                                        th:text="#{NextStep}">
+                                </button>
+                            </li>
+                        </ul>
+                    </form>
+
+
+                    <form th:if="${step eq 5}" class="col-sm-12" th:action="@{/publish-room-ad}" th:object="${form}"
+                          method="post">
+                        <div class="tab-pane" role="tabpanel" id="complete">
+                            <input type="hidden" th:field="*{step}">
+                            <input type="hidden" th:field="*{propertyId}">
+                            <div class="promote-box col-sm-12">
+                                <div class="promote-box-header" th:text="#{FeaturedListing}">
+
+                                </div>
+                                <div class="promote-box-body col-sm-12">
+                                    <p th:text="#{PromoteText}"></p>
+                                </div>
+                                <div class="promote-box-footer">
+                                    <h2 class="col-sm-9">444 HUF</h2>
+                                    <p class="col-sm-3" th:text="#{Select}"></p>
+                                </div>
+                            </div>
+                            <ul class="list-inline pull-right">
+                                <li>
+                                    <button class="default-flatshares-btn-next col-sm-4 col-sm-offset-4 next-step"
+                                            th:text="#{Publish}">
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                    <div class="clearfix"></div>
+                </div>
+
+        </div>
+        </section>
+
+    </div>
+</div>
+</div>
+</body>
+</html>

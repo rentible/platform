@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+>
+
+<h:head>
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css"/>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"/>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"/>
+</h:head>
+
+<h:body styleClass="login-background">
+    <h:outputStylesheet library="css" name="login.css"/>
+    <div class="valign-wrapper" id="login-page">
+        <div class="container">
+            <div class="center-align">
+                <div class="row">
+                    <div class="col s6 offset-s3 responsive-card">
+                        <div class="card">
+                            <div class="card-content responsive-card-content">
+                                <h:graphicImage library="images" name="logo1.svg" style="max-width: 256px; margin-top: 20px;" />
+                                <h:form prependId="false" id="form-login">
+
+                                    <p:panelGrid columns="1" styleClass="ui-fluid center ui-noborder">
+                                        <div class="row">
+                                            <div class="col s12 input-field">
+                                                <p:outputLabel styleClass="responsive-login-label" for="username" value="Username"/>
+                                                <p:inputText styleClass="responsive-login-input" required="true" id="username" requiredMessage="User required"/>
+                                            </div>
+
+                                            <div class="col s12 input-field">
+                                                <p:outputLabel styleClass="responsive-login-label" for="password" value="Password"/>
+                                                <p:password styleClass="responsive-login-input" required="true" id="password" requiredMessage="Password required!"/>
+                                            </div>
+
+                                            <!--<div class="input-field center-align">-->
+                                            <!--<p:outputLabel styleClass="responsive-login-label" for="code" value="Google Authenticator Verification Code"/>-->
+                                            <!--<p:inputText styleClass="responsive-login-input col-sm-2" id="code"/>-->
+                                            <!--</div>-->
+                                        </div>
+                                    </p:panelGrid>
+
+                                    <h:form styleClass="ui-fluid center ui-noborder" rendered="${!empty param['error']}">
+                                        <div class="login-alert">
+                                            Some of the details you entered are incorrect please try again!
+                                        </div>
+                                    </h:form>
+
+                                    <h:form styleClass="ui-fluid center ui-noborder" rendered="${!empty param['blocked']}">
+                                        <div class="login-alert">
+                                            Too many attempt ! Your IP addres is blocked!
+                                        </div>
+                                    </h:form>
+
+                                    <div class="center-align">
+                                        <p:commandLink value="Login" styleClass="login-button" ajax="false"/>
+                                    </div>
+
+                                </h:form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).on("ready", function () {
+            $('#login-page').css({'height': '100vh'});
+        });
+    </script>
+</h:body>
+</html>

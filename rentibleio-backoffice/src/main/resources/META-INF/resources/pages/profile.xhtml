@@ -1,0 +1,187 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="template.xhtml">
+
+    <ui:define name="implementation">
+        <!--https://www.journaldev.com/3088/primefaces-calendar-component-example-tutorial-->
+        <!--<script type="text/javascript">-->
+            <!--PrimeFaces.locales['de'] = {-->
+                <!--closeText: 'Schließen',-->
+                <!--prevText: 'Zurück',-->
+                <!--nextText: 'Weiter',-->
+                <!--monthNames: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],-->
+                <!--monthNamesShort: ['Jan', 'Feb', 'März', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],-->
+                <!--dayNames: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],-->
+                <!--dayNamesShort: ['Son', 'Mon', 'Die', 'Mit', 'Don', 'Fre', 'Sam'],-->
+                <!--dayNamesMin: ['S', 'M', 'D', 'M ', 'D', 'F ', 'S'],-->
+                <!--weekHeader: 'Woche',-->
+                <!--FirstDay: 1,-->
+                <!--isRTL: false,-->
+                <!--showMonthAfterYear: false,-->
+                <!--yearSuffix: '',-->
+                <!--timeOnlyTitle: 'Nur Zeit',-->
+                <!--timeText: 'Zeit',-->
+                <!--hourText: 'Stunde',-->
+                <!--minuteText: 'Minute',-->
+                <!--secondText: 'Sekunde',-->
+                <!--currentText: 'Aktuelles Datum',-->
+                <!--ampm: false,-->
+                <!--month: 'Monat',-->
+                <!--week: 'Woche',-->
+                <!--day: 'Tag',-->
+                <!--allDayText: 'Ganzer Tag'-->
+            <!--};-->
+        <!--</script>-->
+        <style type="text/css">
+            .value {
+                font-weight: bold;
+            }
+        </style>
+        <h:form styleClass="content-page" id="form">
+
+                <p:growl id="msgs" showDetail="true" />
+
+                <h:panelGrid columns="2" cellpadding="5">
+
+                    <p:tabView>
+                        <p:tab title="Personal Info">
+                            <h:panelGrid columns="2" cellpadding="10">
+                                <p:outputLabel for="username" value="Username:"/>
+                                <p:inputText id="username" value="#{profileController.user.username}" class="tab-input" required="true" label="text"/>
+
+                                <p:outputLabel for="email" value="Email:"/>
+                                <p:inputText id="email" value="#{profileController.user.email}" class="tab-input" required="true" label="text"/>
+
+                                <p:outputLabel for="firstName" value="First name:"/>
+                                <p:inputText id="firstName" value="#{profileController.user.userDetail.firstName}"
+                                             class="tab-input" required="true" label="text"/>
+
+                                <p:outputLabel for="lastName" value="Last name:"/>
+                                <p:inputText id="lastName" value="#{profileController.user.userDetail.lastName}"
+                                             class="tab-input" required="true" label="text"/>
+
+                                <p:outputLabel for="dateOfBirth" value="Date of birth:"/>
+                                <p:calendar id="dateOfBirth" value="#{profileController.user.userDetail.dateOfBirth}"
+                                            class="tab-input" required="true" showOn="button">
+                                    <f:convertDateTime pattern="MM/dd/yyyy"/>
+                                    <f:converter converterId="timestampConverter"/>
+                                </p:calendar>
+
+                                <p:outputLabel for="gender" value="Gender:"/>
+                                <p:inputText id="gender" value="#{profileController.user.userDetail.gender}"
+                                             class="tab-input" required="true" label="text"/>
+
+                                <p:outputLabel for="phoneNumber" value="Phone number:"/>
+                                <p:inputText id="phoneNumber" value="#{profileController.user.userDetail.phoneNumber}"
+                                             class="tab-input" required="true" label="text"/>
+
+                                <p:outputLabel for="language" value="Language:"/>
+                                <p:inputText id="language" value="#{profileController.user.language}" class="tab-input" required="true" label="text"/>
+                            </h:panelGrid>
+                        </p:tab>
+                        <p:tab title="Credit information">
+                            <h:panelGrid columns="2" cellpadding="10">
+                                <p:outputLabel for="normalCredit" value="Normal credit:"/>
+                                <p:inputText id="normalCredit" value="#{profileController.user.userDetail.normalCredit}"
+                                             class="tab-input" disabled="true" label="text"/>
+
+                                <p:outputLabel for="fbId" value="Facebook id:"/>
+                                <p:inputText id="fbId" value="#{profileController.user.userDetail.fbId}"
+                                             class="tab-input" disabled="true" label="text"/>
+
+                                <p:outputLabel for="fbCredit" value="Facebook credit:"/>
+                                <p:inputText id="fbCredit" value="#{profileController.user.userDetail.fbCredit}"
+                                             class="tab-input" disabled="true" label="text"/>
+                            </h:panelGrid>
+                        </p:tab>
+                        <p:tab title="Account information">
+                            <h:panelGrid columns="2" cellpadding="10">
+                                <p:outputLabel for="numberOfLogin" value="Number of login:"/>
+                                <p:inputText id="numberOfLogin" value="#{profileController.user.numberOfLogin}" class="tab-input" disabled="true" label="number"/>
+
+                                <p:outputLabel for="liftUpExpire" value="Lift up expire:"/>
+                                <p:calendar id="liftUpExpire" value="#{profileController.user.userDetail.liftUpExpire}"
+                                            class="tab-input" disabled="true">
+                                    <f:converter converterId="timestampConverter"/>
+                                </p:calendar>
+
+                                <p:outputLabel for="showLogoExpire" value="Show logo expire:"/>
+                                <p:calendar id="showLogoExpire"
+                                            value="#{profileController.user.userDetail.showLogoExpire}"
+                                            class="tab-input" disabled="true">
+                                    <f:converter converterId="timestampConverter"/>
+                                </p:calendar>
+
+                                <p:outputLabel for="showUrlExpire" value="Show url expire:"/>
+                                <p:calendar id="showUrlExpire"
+                                            value="#{profileController.user.userDetail.showUrlExpire}" class="tab-input"
+                                            disabled="true">
+                                    <f:converter converterId="timestampConverter"/>
+                                </p:calendar>
+
+                                <p:outputLabel for="avatar" value="Avatar:"/>
+                                <p:inputText id="avatar" value="#{profileController.user.userDetail.avatar}"
+                                             class="tab-input" label="text"/>
+
+                                <p:outputLabel for="adminVerified" value="Admin verified:"/>
+                                <p:inputText id="adminVerified"
+                                             value="#{profileController.user.userDetail.adminVerified}"
+                                             class="tab-input" disabled="true" label="text"/>
+
+                                <p:outputLabel for="banNote" value="Ban note:"/>
+                                <p:inputText id="banNote" value="#{profileController.user.userDetail.banNote}"
+                                             class="tab-input" disabled="true" label="text"/>
+
+                                <p:outputLabel for="lastLoggedIn" value="Last logged in:"/>
+                                <p:calendar id="lastLoggedIn" value="#{profileController.user.lastLoggedIn}" class="tab-input" disabled="true">
+                                    <f:converter converterId="timestampConverter"/>
+                                </p:calendar>
+
+                                <p:outputLabel for="createdOn" value="Created on:"/>
+                                <p:calendar id="createdOn" value="#{profileController.user.createdOn}" class="tab-input" disabled="true">
+                                    <f:converter converterId="timestampConverter"/>
+                                </p:calendar>
+
+                                <p:outputLabel for="modifiedOn" value="Modified on:"/>
+                                <p:calendar id="modifiedOn" value="#{profileController.user.modifiedOn}" class="tab-input" disabled="true">
+                                    <f:converter converterId="timestampConverter"/>
+                                </p:calendar>
+
+                            </h:panelGrid>
+                        </p:tab>
+                        <p:tab title="Mail information">
+                            <h:panelGrid columns="2" cellpadding="10">
+
+                                <p:outputLabel for="mailSmart" value="Mails mart:"/>
+                                <p:inputText id="mailSmart" value="#{profileController.user.userDetail.mailSmart}"
+                                             class="tab-input" label="text"/>
+
+                                <p:outputLabel for="mailMessage" value="Mail message:"/>
+                                <p:inputText id="mailMessage"
+                                             mailMessage="#{profileController.user.userDetail.mailMessage}"
+                                             class="tab-input" label="text"/>
+
+                                <p:outputLabel for="mailInterest" value="Mail interest:"/>
+                                <p:inputText id="mailInterest" value="#{profileController.user.userDetail.mailInterest}"
+                                             class="tab-input" label="text"/>
+
+                                <p:outputLabel for="mailNews" value="Mail news:"/>
+                                <p:inputText id="mailNews" value="#{profileController.user.userDetail.mailNews}"
+                                             class="tab-input" label="text"/>
+
+                                <p:outputLabel for="emailApprovedOn" value="Email approved on:"/>
+                                <p:inputText id="emailApprovedOn"
+                                             alue="#{profileController.user.userDetail.emailApprovedOn}"
+                                             class="tab-input" disabled="true" label="text"/>
+
+                            </h:panelGrid>
+                        </p:tab>
+                    </p:tabView>
+                </h:panelGrid>
+                <p:commandButton value="Submit" update="msgs" action="#{profileController.modify()}" styleClass="ui-priority-primary"/>
+            </h:form>
+    </ui:define>
+</ui:composition>

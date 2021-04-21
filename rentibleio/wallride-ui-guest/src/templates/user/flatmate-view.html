@@ -1,0 +1,223 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description"/>
+    <meta name="keywords"/>
+    <meta name="author" content=""/>
+    <title th:text="${WEBSITE_TITLE}"></title>
+    <!--/*/ <th:block th:replace="layout::head-link"> /*/-->
+    <link rel="alternate" type="application/atom+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/atom.xml}"/>
+    <link rel="alternate" type="application/rss+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/rss.xml}"/>
+    <link rel="stylesheet" th:href="@{/resources/bundle.css}" href="/resources/guest/bundle.css"/>
+    <!--/*/ </th:block> /*/-->
+    <!--/*/ <th:block th:replace="layout::head-script"> /*/-->
+    <script th:src="@{/resources/bundle.js}" src="/resources/guest/bundle.js"></script>
+    <!--/*/ </th:block> /*/-->
+    <script th:replace="google-analytics::ga(null)"></script>
+</head>
+<body>
+<div id="wrap">
+    <div th:replace="layout::nav"></div>
+    <div th:replace="layout::postAd"></div>
+    <div class="container l-5-vw r-5-vw">
+        <div class="row">
+            <div>
+                <form id="flatmateView" th:action="@{/send-message-to-flatmate}" method="post" role="form">
+
+                    <div class="row">
+
+                        <!-- INFO BOX -->
+                        <div id="flatmateInfo" class="col-sm-4">
+                            <div>
+                                <h2 th:text="${ad.title}"></h2>
+                            </div>
+                            <div class="room-view-property-box height-50">
+                                <label th:text="#{About} + ' ' + ${userDetail.firstName}"></label>
+                            </div>
+                            <div class="room-view-property-box">
+                                <label th:text="#{Age} + ':'"></label>
+                                <span class="detail-view-font" th:text="${userAge}"></span><br>
+
+                                <label th:text="#{Gender} + ':'"></label>
+                                <span class="detail-view-font" th:text="${gender}"></span><br>
+
+                                <label th:text="#{Languages} + ':'"></label>
+                                <span class="detail-view-font" th:each="language,i : ${languages}">
+                                    <span th:text="${language}"></span>
+                                    <span th:if="${i.count ne i.size}" th:text="', '"></span>
+                                </span>
+                            </div>
+
+                            <div class="room-view-property-box">
+                                <label class="property-card-item-text" th:text="#{Districts} + ':'"></label>
+                                <span class="property-card-item-text ml-5"
+                                      th:each="district : ${districts}" th:text="${district}"></span><br>
+                                <label th:text="#{BudgetUpTo} + ':'"></label>
+                                <span class="detail-view-font" th:text="${ad.budget} + ' ' + ${currency}"></span><br>
+                            </div>
+                            <button disabled
+                                    class="default-flatshares-btn-white default-flatshares-btn-full text-uppercase my-5"><span
+                                    th:text="#{ShareTogether}"></span></button>
+                            <button disabled="true"
+                                    class="default-flatshares-btn default-flatshares-btn-full text-uppercase my-5"><span
+                                    th:text="#{SendMessage}"></span></button>
+                        </div>
+
+                        <div class="col-sm-12 col-md-8 m-t-15">
+                            <!-- Slider -->
+                            <div id="slider">
+                                <!-- Top part of the slider -->
+                                <div id="carousel-bounding-box">
+                                    <div class="carousel slide" id="myCarousel">
+                                        <!-- Carousel items -->
+                                        <div class="carousel-inner">
+                                            <div class="item active"
+                                                 th:style="'background-image:url(' + @{|/media/${userDetail.profileImage.filePath}|} + ');'">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DESCRIPTION -->
+                    <div>
+                        <h2 th:text="#{FewWordsFrom} + ' ' + ${userDetail.firstName}"></h2>
+                        <p class="detail-view-font" th:text="${ad.description}"></p>
+                    </div>
+
+                    <div class="col-sm-12 more-info-container">
+                        <label th:text="#{ProfileDetails}" class="detail-view-font col-sm-2"></label>
+                        <div class="more-info-icon col-sm-2 col-sm-offset-8">
+                            <i class="fab fa-pinterest-p pinterest-color"></i>
+                            <i class="fab fa-twitter twitter-color"></i>
+                            <i class="fab fa-facebook-f facebook-color"></i>
+                        </div>
+                    </div>
+
+                    <div>
+                        <dl class="dl-horizontal detail-view-font col-sm-12">
+                            <dt th:text="#{City}"></dt>
+                            <dd class="item" th:text="${city}"></dd>
+                            <dt th:text="#{RentPeriod}"></dt>
+                            <dd class="item" th:text="${rentPeriod}"></dd>
+                            <dt th:if="${moveInFrom}" th:text="#{MoveInFrom}"></dt>
+                            <dd class="item" th:if="${moveInFrom}" th:text="${moveInFrom}"></dd>
+                            <dt th:text="#{SmokingAllowed}"></dt>
+                            <dd class="item" th:switch="${ad.smokingAllowed}">
+                                <span th:case="true" th:text="#{Yes}"></span>
+                                <span th:case="*" th:text="#{No}"></span>
+                            </dd>
+                        </dl>
+                    </div>
+
+                    <!-- MORE INFO ABOUT THE USER -->
+                    <div class="more-info-header more-info-container col-sm-12">
+                        <label class="col-sm-2" th:text="#{MoreAbout} + ' ' + ${userDetail.firstName}"></label>
+                        <p class="col-sm-2" th:text="#{RoommatePreferences}"></p>
+                        <div class="more-info-icon col-sm-2 col-sm-offset-6">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-exchange-alt"></i>
+                            <i class="fas fa-list"></i>
+                        </div>
+                    </div>
+
+                    <div id="landlord" class="col-sm-12 col-md-6 pl-10 mt-0">
+                        <div class="col-sm-12 pl-0">
+                            <div class="col-sm-1">
+                                <img th:src="@{|/media/${userDetail.profileImage.filePath}|}"
+                                     alt="Avatar"
+                                     class="more-about-landlord-img mr-5">
+                            </div>
+                            <div class="col-sm-11">
+                                <p class="f-w-600 step-active-font mb-0"
+                                   th:text="${userDetail.firstName} + ' ' + ${userDetail.lastName}"></p>
+                                <p th:text="${userAge} + ', ' + ${gender}"></p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-10">
+                            <label for="phone" th:text="#{Phone}"></label>
+                            <p id="phone" th:text="${userDetail.phoneNumber}"></p>
+                        </div>
+                        <div class="col-sm-12 mt-10">
+                            <label for="occupation" th:text="#{Occupation}"></label>
+                            l<p id="occupation" th:text="${occupation}"></p>
+                        </div>
+                        <div class="col-sm-12 mt-10">
+                            <label class="col-sm-12" for="hobbies" th:text="#{Hobbies}"></label>
+                            <div th:each="hobby : ${hobbies}" class="col-sm-4" id="hobbies">
+                                <img th:src="@{'../resources/img/' + ${hobby} + '.png'}"></img>
+                                <p th:text="${hobby}"></p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mt-10">
+                            <label for="languages" th:text="#{Languages}"></label>
+                            <div id="languages">
+                                <p th:each="language : ${languages}" class="col-sm-3" th:text="${language}"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+        <hr>
+        <h2 class="mt-30 mb-25 detail-view-font text-align-center"
+            th:text="#{MoreMatches}"></h2>
+        <div class="l-5-vw r-5-vw">
+            <div class="col-sm-12 mb-25">
+                <a class="col-sm-6 col-md-4 col-lg-3 mb-20, text-deco-none" th:each="ad : ${ads}"
+                   th:href="@{/flatmate-view(id=${ad.id})}"
+                   target="_blank">
+                    <div class="property-card">
+                        <div id="slider">
+                            <div id="carousel-bounding-box">
+                                <div class="carousel slide" id="myCarousel">
+                                    <div class="carousel-inner">
+                                        <div class="item active property-list-img"
+                                             th:style="'background-image:url(' + @{|/media/${ad.userDetail.profileImage.filePath}|} + ');'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="caption property-card-items responsive-property-items text-align-left">
+                            <p class="flatmate-title" th:text="${ad.title}"></p>
+                            <div class="flatmate-card-item b-b-none">
+                                <i class="fas fa-map-marker-alt property-card-item-icon"></i>
+                                <p class="property-card-item-text" th:text="#{Districts} + ':'"></p>
+                                <p class="property-card-item-text ml-5"
+                                   th:each="district : ${ad.districts}" th:text="${district}"></p>
+                            </div>
+                            <div class="flatmate-card-item b-b-none">
+                                <i class="fas fa-wallet property-card-item-icon"></i>
+                                <p class="property-card-item-text" th:text="#{FlatmateBudget}"></p>
+                                <p class="property-card-item-text ml-5"
+                                   th:text="${ad.budget} + ' ' + ${ad.currencyCaption}"></p>
+                            </div>
+                            <div class="flatmate-card-item">
+                                <i class="fas fa-calendar-alt property-card-item-icon"></i>
+                                <p class="property-card-item-text" th:text="#{RentPeriod} + ':'"></p>
+                                <p class="property-card-item-text ml-5"
+                                   th:text="${ad.termOfLease}"></p>
+                            </div>
+                            <div class="property-card-item-icon mt-10">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-exchange-alt"></i>
+                                <i class="fas fa-comment"></i>
+                                <span class="view-profile-btn" th:text="#{ViewProfile}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <div th:replace="layout::footer" id="footer"></div> -->
+</body>
+</html>

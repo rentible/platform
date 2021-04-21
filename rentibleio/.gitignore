@@ -1,0 +1,11 @@
+home/
+target/
+dist/
+node_modules/
+.node/
+.settings/
+.project
+.classpath
+.idea
+*.iml
+npm-debug.log

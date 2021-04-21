@@ -1,0 +1,120 @@
+.login-button {
+    height: 54px;
+    line-height: 56px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #fea821;
+    text-align: center;
+    letter-spacing: .5px;
+    transition: .2s ease-out;
+    cursor: pointer;
+    border: none;
+    border-radius: 2px;
+    display: inline-block;
+    outline: 0;
+    padding: 0 2rem;
+    text-transform: uppercase;
+    vertical-align: middle;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.register-button{
+    height: 54px;
+    line-height: 56px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #2196F3;
+    text-align: center;
+    letter-spacing: .5px;
+    transition: .2s ease-out;
+    cursor: pointer;
+    border: none;
+    border-radius: 2px;
+    display: inline-block;
+    outline: 0;
+    padding: 0 2rem;
+    text-transform: uppercase;
+    vertical-align: middle;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.login-background {
+    background-image: url("#{resource['images/bg-final.jpg']}");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    overflow: hidden;
+    min-height: 100vh;
+}
+
+.login-alert {
+    padding: 20px;
+    background-color: #f44336; /* Red */
+    color: white;
+    margin-bottom: 15px;
+}
+
+.google-btn-form {
+    width: 100%;
+    margin-bottom: 25px;
+}
+
+.google-btn {
+    color: black !important;
+    font-size: small !important;
+    float: none !important;
+    width: auto !important;
+}
+
+.google-btn-active {
+    background-color: #dd4b39 !important;
+}
+
+.disable-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+@media screen and (max-width: 992px) and (min-width: 601px) {
+    .responsive-card-content{
+        line-height: 2.5;
+        font-size: 30px;
+    }
+    .responsive-card{
+        margin-left: 5%!important;
+        width: 90%!important;
+    }
+    .responsive-login-label{
+        font-size: 40px;
+    }
+    .responsive-login-input{
+        font-size: 45px!important;
+        height: 10rem!important;
+    }
+    .login-button{
+        padding: 1rem 5rem;
+        height: 100px;
+        line-height: inherit;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .responsive-card-content{
+        line-height: 3.5;
+        font-size: 45px;
+    }
+    .responsive-card{
+        margin-left: 5%!important;
+        width: 90%!important;
+    }
+    .responsive-login-label{
+        font-size: 60px;
+    }
+    .responsive-login-input{
+        font-size: 50px!important;
+    }
+}

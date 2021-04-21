@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:security="http://www.springframework.org/security/tags">
+
+    <ul class="sidebar-menu tree" data-widget="tree">
+
+        <li class="header">
+            Admin area
+        </li>
+        <li>
+            <a href="/pages/dashboard"><i class="fa fa-users"> Users</i></a>
+        </li>
+        <li>
+            <a href="/pages/code-store"><i class="fa fa-cogs"> Code Store</i></a>
+        </li>
+        <li>
+            <a href="/pages/emailtemplate"><i class="fa fa-envelope-o"> Email Templates</i></a>
+        </li>
+        <li>
+            <a href="/actuator"><i class="fa fa-exclamation-triangle"> Actuator</i></a>
+        </li>
+
+        <security:authorize access="hasAuthority('land_lord')">
+        <li class="header">
+            Landlord area
+        </li>
+        <li>
+            <a href="/pages/myflat"><i class="fa fa-home"> My Flats</i></a>
+        </li>
+        </security:authorize>
+    </ul>
+</ui:composition>

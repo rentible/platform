@@ -1,0 +1,70 @@
+.header-bar{
+    width: 100%;
+    height: 68px;
+    background-color: #313b3f;
+    border-bottom: solid 1px #404a4e;
+    position: fixed;
+    z-index: 100;
+}
+
+.header-content {
+    position: fixed;
+    right: 0;
+}
+
+.header-btn {
+    height: 68px;
+    padding: 5px 5px 5px 5px!important;
+    font-size: 15px;
+    color: white;
+    background-color: #313b3f;
+    border: none;
+}
+
+.header-item-logout {
+    padding: 20px 15px 3px 0;
+    margin-top: -1px;
+    width: 150px;
+    float: right;
+}
+
+.header-item {
+    margin-top: -1px;
+    width: auto;
+    float: right;
+    padding: 0 20px 0 20px !important;
+}
+
+.header-item-content{
+    margin: 2px 0 0 3vh;
+}
+
+.header-item-img{
+    max-width: 64px;
+    margin: -5px 5px 0 0;
+}
+
+.main-title{
+    text-align: center;
+    color: white;
+    margin-bottom: 15px;
+}
+
+delete-image {
+    background-image: url("#{resource['images/delete_ico.png']}");
+    max-width: 64px;
+}
+
+@media screen and (max-width: 960px) {
+   .header-bar{
+       display: none;
+   }
+}
+
+.content-page {
+    margin-top: 60px;
+}
+
+.side-nav {
+    font-size: 120% !important;
+}

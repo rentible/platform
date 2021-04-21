@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+>
+
+<h:head>
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css"/>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"/>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"/>
+</h:head>
+
+<h:body styleClass="login-background">
+    <h:outputStylesheet library="css" name="login.css"/>
+    <div class="valign-wrapper" id="login-page">
+        <div class="container">
+            <div class="center-align">
+                <div class="row">
+                    <div class="col s6 offset-s3 responsive-card">
+                        <div class="card">
+                            <div class="card-content responsive-card-content">
+                                <h:graphicImage library="images" name="logo1.svg" style="max-width: 256px; margin-top: 20px;"/>
+
+                                <div id="qr">
+                                    <h5>
+                                        Scan this Barcode using Google Authenticator app on your phone
+                                        to use it later in login
+                                    </h5>
+                                    <div style="margin: 40px 0 40px 0">
+                                        <h:graphicImage value="#{googleAuthController.getQrUrl(param['id'])}"/>
+                                    </div>
+                                </div>
+                                <a href="/login" class="register-button">Go to login page</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).on("ready", function () {
+            $('#login-page').css({'height': '100vh'});
+        });
+    </script>
+</h:body>
+</html>

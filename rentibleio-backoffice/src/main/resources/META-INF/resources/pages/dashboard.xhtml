@@ -1,0 +1,56 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="template.xhtml">
+
+    <ui:define name="implementation">
+        <div>
+            <h2>Members</h2>
+            <h:form>
+                <p:dataTable var="u" value="#{userPaginator.model}"
+                             rows="10"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             lazy="true"
+                             rowsPerPageTemplate="5,10,25">
+
+                    <p:column headerText="Id" filterBy="#{u.id}" filterMatchMode="contains">
+                        <h:outputText value="#{u.id}"/>
+                    </p:column>
+
+                    <p:column headerText="Name" filterBy="#{u.username}" filterMatchMode="contains">
+                        <h:outputText value="#{u.username}"/>
+                    </p:column>
+
+                    <p:column headerText="Enabled">
+                        <h:outputText value="#{u.enabled}"/>
+                    </p:column>
+
+                    <p:column headerText="Created">
+                        <h:outputText value="#{u.createdOn}"/>
+                    </p:column>
+
+                    <p:column headerText="Modified">
+                        <h:outputText value="#{u.modifiedOn}"/>
+                    </p:column>
+
+                    <p:column style="text-align: center" headerText="Functions">
+
+                        <p:commandLink id="impersonate" action="#{userService.impersonate(u.id)}" ajax="false">
+                            <i class="fa fa-user-secret"/>
+                        </p:commandLink>
+
+                        <h:outputText value=" "/>
+
+                        <p:commandLink id="ban" action="#{userService.ban(u.id)}" ajax="false">
+                            <i class="fa fa-ban"/>
+                        </p:commandLink>
+
+
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

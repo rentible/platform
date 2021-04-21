@@ -1,0 +1,463 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description"/>
+    <meta name="keywords"/>
+    <meta name="author" content=""/>
+    <title th:text="${WEBSITE_TITLE}"></title>
+    <!--/*/ <th:block th:replace="layout::head-link"> /*/-->
+    <link rel="alternate" type="application/atom+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/atom.xml}"/>
+    <link rel="alternate" type="application/rss+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/rss.xml}"/>
+    <link rel="stylesheet" th:href="@{/resources/bundle.css}" href="/resources/guest/bundle.css"/>
+
+    <script th:src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
+            src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--/*/ </th:block> /*/-->
+    <!--/*/ <th:block th:replace="layout::head-script"> /*/-->
+    <script th:src="@{/resources/bundle.js}" src="/resources/guest/bundle.js"></script>
+    <!--/*/ </th:block> /*/-->
+    <script th:replace="google-analytics::ga(null)"></script>
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+        #map {
+            height: 35vh;
+            width: 100%;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <div th:replace="layout::nav"></div>
+    <div th:replace="layout::postAd"></div>
+    <div class="container pb-25">
+        <div class="row">
+            <form th:object="${property}" method="post" role="form">
+                <div class="room-view-header"></div>
+                <div class="room-view-header-image"
+                     th:style="'background-image:url(' + @{|/media/${imageUrls[0]}|} + ');'"></div>
+                <div class="room-view-header-title">
+                    <h1 th:text="*{title}"></h1>
+                    <p th:text="*{address.city} + ', ' + *{address.address1} + ' ' + *{address.address2}"></p>
+                </div>
+
+                <div class="room-view-header-bottom">
+                    <p th:text="*{rentPrice} + ' ' + *{currencyCaption} + ' / ' + #{Month}"></p>
+                    <button disabled="true" class="text-uppercase default-flatshares-btn-white"><span
+                            th:text="#{ShareTogether}"></span></button>
+                    <button disabled="true" class="default-flatshares-btn text-uppercase"><span
+                            th:text="#{SendMessage}"></span></button>
+                </div>
+
+                <div class="mt-10">
+
+                    <!-- INFO BOX -->
+                    <div class="col-sm-12 col-md-6 l-5-vw">
+                        <div id="info" class="col-sm-12">
+                            <h4 th:text="#{Room}"></h4>
+                            <div th:if="*{roomSize}" class="col-sm-3 col-md-2">
+                                <i class="fas fa-vector-square border-round"></i>
+                                <p class="f-w-600" th:text="*{roomSize}"></p>
+                                <p th:text="#{Sqm}" class="text-uppercase"></p>
+                            </div>
+                            <div th:if="*{bedsNumber}" class="col-sm-3 col-md-2">
+                                <i class="fas fa-bed border-round"></i>
+                                <p class="f-w-600" th:text="*{bedsNumber}"></p>
+                                <p th:text="#{Bed}"></p>
+                            </div>
+                            <div th:if="*{roommatesNumber}" class="col-sm-3 col-md-2">
+                                <i class="fas fa-users border-round"></i>
+                                <p class="f-w-600" th:text="*{roommatesNumber}"></p>
+                                <p th:text="#{Roommate}"></p>
+                            </div>
+                        </div>
+                        <div id="info" class="col-sm-12 mt-10">
+                            <h4 th:text="#{Apartment}"></h4>
+                            <div th:if="*{apartmentSize}" class="col-sm-3 col-md-2">
+                                <i class="fas fa-vector-square border-round"></i>
+                                <p class="f-w-600" th:text="*{apartmentSize}"></p>
+                                <p th:text="#{Sqm}" class="text-uppercase"></p>
+                            </div>
+                            <div th:if="*{flatmatesNumber}" class="col-sm-3 col-md-2">
+                                <i class="fas fa-user-friends border-round"></i>
+                                <p class="f-w-600" th:text="*{flatmatesNumber}"></p>
+                                <p th:text="#{Flatmate}"></p>
+                            </div>
+                            <div th:if="${floor}" class="col-sm-3 col-md-2">
+                                <i class="far fa-building border-round"></i>
+                                <p class="line-height-1-6" th:text="${floor}"></p>
+                            </div>
+                            <div th:if="*{toilet}" class="col-sm-3 col-md-2">
+                                <i class="fas fa-toilet border-round"></i>
+                                <p class="f-w-600" th:text="*{toilet}"></p>
+                                <p th:text="#{Toilet}"></p>
+                            </div>
+                            <div th:if="*{smokingAllowed}" class="col-sm-3 col-md-2">
+                                <i class="fas fa-smoking border-round"></i>
+                                <p class="f-w-600" th:text="#{Smoking}"></p>
+                                <p th:text="#{Allowed}"></p>
+                            </div>
+                            <div th:if="!*{smokingAllowed}" class="col-sm-3 col-md-2">
+                                <i class="fas fa-smoking-ban border-round"></i>
+                                <p class="f-w-600" th:text="#{Smoking}"></p>
+                                <p th:text="#{NotAllowed}"></p>
+                            </div>
+
+                            <div th:if="*{elevator}" class="col-sm-3 col-md-2">
+                                <i class="fas fa-door-closed border-round"></i>
+                                <p class="f-w-600" th:text="#{Has}"></p>
+                                <p th:text="#{Elevator}"></p>
+                            </div>
+                            <div th:if="!*{elevator}" class="col-sm-3 col-md-2">
+                                <i class="fas fa-door-closed border-round"></i>
+                                <p class="f-w-600" th:text="#{No}"></p>
+                                <p th:text="#{Elevator}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROOM IMAGES -->
+                <div class="col-sm-12 col-md-6 r-5-vw">
+
+                    <!-- Slider -->
+                    <div id="slider">
+                        <!-- Top part of the slider -->
+                        <div id="carousel-bounding-box">
+                            <div class="carousel slide" id="myCarousel">
+                                <!-- Carousel items -->
+                                <div class="carousel-inner">
+                                    <div th:each="imageUrl,i : ${imageUrls}"
+                                         class="item"
+                                         th:style="'background-image:url(' + @{|/media/${imageUrl}|} + ');'"
+                                         th:data-slide-number="${i.index}"
+                                         th:classappend="${i.index == 0} ? active">
+                                    </div>
+                                </div>
+
+                                <!-- Carousel nav -->
+                                <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                                    <span class="glyphicon glyphicon-chevron-left"></span>
+                                </a>
+                                <a class="right carousel-control" href="#myCarousel" role="button"
+                                   data-slide="next">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- DESCRIPTION -->
+                <div class="col-sm-12 col-md-6 l-5-vw mt-10">
+                    <h4 class="detail-view-font" th:text="#{Description} + ':'"></h4>
+                    <p class="detail-view-font" th:text="*{description}"></p>
+                </div>
+
+                <!-- GOOGLE MAP -->
+                <div class="col-sm-12 col-md-6 r-5-vw mt-10">
+                    <div id="map"></div>
+
+                    <script th:inline="javascript">
+                        /*<![CDATA[*/
+
+                        function initMap() {
+                            var myLatLng = /*[[${CenterLatLng}]]*/;
+                            var rentPriceCurrency = /*[[${rentPriceCurrency}]]*/;
+                            var rentPrice = /*[[${rentPrice}]]*/;
+                            var text;
+
+                            if (rentPriceCurrency.toString() == 'EUR') {
+                                text = '€ '.concat(rentPrice.toString(), ' / month');
+                            } else if (rentPriceCurrency.toString() == 'HUF') {
+                                text = rentPrice.toString().concat('HUF', '/M');
+                            }
+
+                            var map = new google.maps.Map(document.getElementById('map'), {
+                                zoom: 15,
+                                center: myLatLng,
+                                disableDefaultUI: true,
+                                gestureHandling: 'greedy'
+                            });
+
+                            var markerIcon = {
+                                url: "../resources/img/custom-marker-flatshares-round.png",
+                                origin: new google.maps.Point(0, 0),
+                                labelOrigin: new google.maps.Point(65, 22),
+                            };
+
+                            var marker = new google.maps.Marker({
+                                position: myLatLng,
+                                label: {
+                                    text: text,
+                                    fontWeight: '600',
+                                    fontSize: '14px',
+                                    fontFamily: 'Poppins'
+                                },
+                                labelOrigin: new google.maps.Point(9, 9),
+                                icon: markerIcon,
+                                map: map
+                            });
+
+                            /*]]>*/
+                        }
+                    </script>
+
+                    <!-- Google Map Script -->
+                    <script async="async" defer="defer"
+                            th:src="@{|https://maps.googleapis.com/maps/api/js?key=${googleApiKey}&callback=initMap|}"></script>
+                </div>
+
+                <!-- MORE INFO -->
+                <!-- <hr>
+                <label style="margin-bottom: 0;" class="detail-view-font" th:text="#{MoreAboutTheProperty}"></label>
+                <hr> -->
+
+                <div class="col-sm-12 l-5-vw">
+
+                    <div id="terms" class="col-sm-12 col-md-6">
+                        <h3 th:text="#{Terms}"></h3>
+                        <div class="col-sm-12 pl-0">
+                            <label for="availableFrom" th:text="#{AvailableFrom}"></label>
+                            <p id="availableFrom" th:text="${availableFrom}"></p>
+                        </div>
+                        <div class="col-sm-12 pl-0">
+                            <label for="rentPeriod" th:text="#{RentPeriod}"></label>
+                            <div id="rentPeriod">
+                                <p th:each="rentPeriod : ${rentPeriods}" class="col-sm-4 pl-0"
+                                   th:text="${rentPeriod}"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="neighborhood" class="col-sm-12 col-md-6 r-5-vw">
+                        <h3 th:text="#{Neighborhood}"></h3>
+                        <div class="col-sm-12">
+                            <label class="col-sm-12" for="surroundings" th:text="#{EnvironmentAndSurroundings}"></label>
+                            <div id="surroundings" class="col-sm-4" th:each="surrounding : ${surroundings}">
+                                <img th:src="@{'../resources/img/' + ${surrounding} + '.png'}"></img>
+                                <p th:text="${surrounding}"></p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="distanceToPublicTransport" th:text="#{DistanceToPublicTransport}"></label>
+                            <div id="distanceToPublicTransport">
+                                <p class="col-sm-12" th:text="*{distanceToPublicTransport} + ' ' + #{Minute}"></p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="publicTransports" th:text="#{NearToMetroOrTram}"></label>
+                            <div id="publicTransports">
+                                <p th:each="publicTransport : ${publicTransports}" class="col-sm-4"
+                                   th:text="${publicTransport}"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="landlord" class="col-sm-12 col-md-6 pl-10 mt-0">
+                        <h2 th:text="#{AboutTheLandlord}"></h2>
+                        <div class="col-sm-12 pl-0">
+                            <div class="col-sm-1">
+                                <img th:class="mr-5" th:src="${landlordProfilePic}" alt="Avatar"
+                                     class="more-about-landlord-img mr-5">
+                            </div>
+                            <div class="col-sm-11">
+                                <p class="f-w-600 step-active-font mb-0"
+                                   th:text="${landlord.firstName} + ' ' + ${landlord.lastName}"></p>
+                                <p th:text="${landlordAge} + ', ' + ${gender}"></p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="phone" th:text="#{Phone}"></label>
+                            <p id="phone" th:text="${landlord.phoneNumber}"></p>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="occupation" th:text="#{Occupation}"></label>
+                            <p id="occupation" th:text="${occupation}"></p>
+                        </div>
+                        <div class="col-sm-12">
+                            <label class="col-sm-12" for="hobbies" th:text="#{Hobbies}"></label>
+                            <div th:each="hobby : ${hobbies}" class="col-sm-4" id="hobbies">
+                                <img th:src="@{'../resources/img/' + ${hobby} + '.png'}"></img>
+                                <p th:text="${hobby}"></p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="languages" th:text="#{Languages}"></label>
+                            <div id="languages">
+                                <p th:each="language : ${languages}" class="col-sm-3" th:text="${language}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Root element of PhotoSwipe. Must have class pswp. -->
+                <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+                    <!-- Background of PhotoSwipe.
+                         It's a separate element as animating opacity is faster than rgba(). -->
+                    <div class="pswp__bg"></div>
+
+                    <!-- Slides wrapper with overflow:hidden. -->
+                    <div class="pswp__scroll-wrap">
+
+                        <!-- Container that holds slides.
+                            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+                            Don't modify these 3 pswp__item elements, data is added later on. -->
+                        <div class="pswp__container">
+                            <div class="pswp__item"></div>
+                            <div class="pswp__item"></div>
+                            <div class="pswp__item"></div>
+                        </div>
+
+                        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+                        <div class="pswp__ui pswp__ui--hidden">
+
+                            <div class="pswp__top-bar">
+
+                                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                                <div class="pswp__counter"></div>
+
+                                <button type="button" class="pswp__button pswp__button--close"
+                                        title="Close (Esc)"></button>
+
+                                <button type="button" class="pswp__button pswp__button--share" title="Share"></button>
+
+                                <button type="button" class="pswp__button pswp__button--fs"
+                                        title="Toggle fullscreen"></button>
+
+                                <button type="button" class="pswp__button pswp__button--zoom"
+                                        title="Zoom in/out"></button>
+
+                                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                                <!-- element will get class pswp__preloader--active when preloader is running -->
+                                <div class="pswp__preloader">
+                                    <div class="pswp__preloader__icn">
+                                        <div class="pswp__preloader__cut">
+                                            <div class="pswp__preloader__donut"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                                <div class="pswp__share-tooltip"></div>
+                            </div>
+
+                            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+                            </button>
+
+                            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+                            </button>
+
+                            <div class="pswp__caption">
+                                <div class="pswp__caption__center"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <script th:inline="javascript">
+                    /*<![CDATA[*/
+                    var imageUrls = /*[[${imageUrls}]]*/;
+                    var items = imageUrls.map(function (img) {
+                        return {
+                            src: "/media/" + img,
+                            h: 0,
+                            w: 0
+                        };
+                    });
+
+                    var options = {
+                        closeOnScroll: false,
+                        history: false,
+                        index: 0
+                    };
+
+                    $('.carousel .item').click(function (event) {
+                        options.index = $(event.target).data('slideNumber');
+                        var gallery = new PhotoSwipe($('.pswp')[0], PhotoSwipeUI_Default, items, options);
+
+                        gallery.listen('gettingData', function (index, item) {
+                            if (item.w < 1 || item.h < 1) {
+                                var img = new Image();
+                                img.onload = function () {
+                                    item.w = this.width;
+                                    item.h = this.height;
+                                    gallery.invalidateCurrItems();
+                                    gallery.updateSize(true);
+                                }
+                                img.src = item.src;
+                            }
+                        });
+
+                        gallery.init()
+                    })
+
+                    /*]]>*/
+                </script>
+            </form>
+        </div>
+        <hr>
+        <div class="l-5-vw r-5-vw">
+            <h2 class="detail-view-font text-align-center my-40"
+                th:text="#{MoreMatches}"></h2>
+            <a class="col-sm-3 mb-20 text-deco-none" th:each="property : ${properties}"
+               th:href="@{/property-view(id=${property.id})}">
+                <div class="property-card min-height-270">
+                    <div id="slider">
+                        <!-- Top part of the slider -->
+                        <div id="carousel-bounding-box">
+                            <div class="carousel slide" id="myCarousel">
+                                <!-- Carousel items -->
+                                <div class="carousel-inner">
+                                    <div class="item active property-list-img"
+                                         th:style="'background-image:url(' + @{|/media/${property.images[0].filePath}|} + ');'"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="caption property-card-items responsive-property-items text-align-left">
+                        <p class="property-title min-height-3em" th:text="${property.title}"></p>
+                        <div class="property-card-item">
+                            <p class="property-card-details"
+                               th:text="${property.address.address1} + ' ' + ${property.address.address2} + ', ' +
+                                  ${property.apartmentSize} + ' ' +
+                                  #{Sqm}"
+                            ></p>
+                        </div>
+                        <div class="property-card-item">
+                            <p class="property-card-details"
+                               th:text="${property.description}"
+                            ></p>
+                        </div>
+
+                        <div style="right: 27px;" class="property-card-item-price">
+                            <p th:if="${property.currencyCaption} == 'EUR'"
+                               th:text=" '€' + ' ' +  ${property.rentPrice} + ' / ' + #{Month}"></p>
+                            <p th:if="${property.currencyCaption} == 'HUF'"
+                               th:text="${property.rentPrice} + ' ' + ${property.currencyCaption} + ' / ' + #{Month}"></p>
+                        </div>
+
+                        <div class="property-card-item-icon">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<!-- <div th:replace="layout::footer" id="footer"></div> -->
+</body>
+</html>

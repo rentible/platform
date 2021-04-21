@@ -1,0 +1,686 @@
+databaseChangeLog:
+- preConditions:
+  - runningAs:
+      username: postgres
+
+- changeSet:
+    id: Create [fk_user_detail_user_id_x_user_id] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: user_detail
+        baseTableSchemaName: cms_hun
+        constraintName: fk_user_detail_user_id_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+        referencedTableSchemaName: public
+
+- changeSet:
+    id: Create [fk_user_detail_profile_image_x_file_descriptor_id] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: profile_image
+        baseTableName: user_detail
+        baseTableSchemaName: cms_hun
+        constraintName: fk_user_detail_profile_image_x_file_descriptor_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: file_descriptor
+        referencedTableSchemaName: public
+
+
+- changeSet:
+      id: Create [fk_property_created_by_x_user_id] fk constraint
+      author: Máté Simon
+      changes:
+      - addForeignKeyConstraint:
+            baseColumnNames: created_by
+            baseTableName: property
+            baseTableSchemaName: cms_hun
+            constraintName: fk_property_created_by_x_user_id
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: user
+            referencedTableSchemaName: public
+
+- changeSet:
+      id: Create [fk_property_modified_by_x_user_id] fk constraint
+      author: Máté Simon
+      changes:
+      - addForeignKeyConstraint:
+            baseColumnNames: modified_by
+            baseTableName: property
+            baseTableSchemaName: cms_hun
+            constraintName: fk_property_modified_by_x_user_id
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: user
+            referencedTableSchemaName: public
+
+- changeSet:
+      id: Create [fk_rental_type_x_code_store_item_id] fk constraint
+      author: Máté Simon
+      changes:
+      - addForeignKeyConstraint:
+            baseColumnNames: rental_type
+            baseTableName: property
+            baseTableSchemaName: cms_hun
+            constraintName: fk_rental_type_x_code_store_item_id
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: code_store_item
+            referencedTableSchemaName: public
+
+- changeSet:
+      id: Create [fk_property_type_x_code_store_item_id] fk constraint
+      author: Máté Simon
+      changes:
+      - addForeignKeyConstraint:
+            baseColumnNames: property_type
+            baseTableName: property
+            baseTableSchemaName: cms_hun
+            constraintName: fk_property_type_x_code_store_item_id
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: code_store_item
+            referencedTableSchemaName: public
+
+- changeSet:
+      id: Create [fk_rent_price_currency_x_code_store_item_id] fk constraint
+      author: Máté Simon
+      changes:
+      - addForeignKeyConstraint:
+            baseColumnNames: rent_price_currency
+            baseTableName: property
+            baseTableSchemaName: cms_hun
+            constraintName: fk_rent_price_currency_x_code_store_item_id
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: code_store_item
+            referencedTableSchemaName: public
+
+- changeSet:
+      id: Create [fk_deposit_currency_x_code_store_item_id] fk constraint
+      author: Máté Simon
+      changes:
+      - addForeignKeyConstraint:
+            baseColumnNames: deposit_currency
+            baseTableName: property
+            baseTableSchemaName: cms_hun
+            constraintName: fk_deposit_currency_x_code_store_item_id
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: code_store_item
+            referencedTableSchemaName: public
+
+- changeSet:
+      id: Create [fk_apartment_condition_x_code_store_item_id] fk constraint
+      author: Máté Simon
+      changes:
+      - addForeignKeyConstraint:
+            baseColumnNames: apartment_condition
+            baseTableName: property
+            baseTableSchemaName: cms_hun
+            constraintName: fk_apartment_condition_x_code_store_item_id
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: code_store_item
+            referencedTableSchemaName: public
+
+- changeSet:
+      id: Create [fk_view_x_code_store_item_id] fk constraint
+      author: Máté Simon
+      changes:
+      - addForeignKeyConstraint:
+            baseColumnNames: view
+            baseTableName: property
+            baseTableSchemaName: cms_hun
+            constraintName: fk_view_x_code_store_item_id
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: code_store_item
+            referencedTableSchemaName: public
+
+- changeSet:
+      id: Create [fk_heating_x_code_store_item_id] fk constraint
+      author: Máté Simon
+      changes:
+      - addForeignKeyConstraint:
+            baseColumnNames: heating
+            baseTableName: property
+            baseTableSchemaName: cms_hun
+            constraintName: fk_heating_x_code_store_item_id
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: code_store_item
+            referencedTableSchemaName: public
+
+- changeSet:
+      id: Create [fk_building_condition_x_code_store_item_id] fk constraint
+      author: Máté Simon
+      changes:
+      - addForeignKeyConstraint:
+            baseColumnNames: building_condition
+            baseTableName: property
+            baseTableSchemaName: cms_hun
+            constraintName: fk_building_condition_x_code_store_item_id
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: code_store_item
+            referencedTableSchemaName: public
+
+- changeSet:
+      id: Add [property_file_descriptor] fk constraint
+      author: Tivadar Bocz
+      changes:
+      - addForeignKeyConstraint:
+            baseColumnNames: main_image
+            baseTableName: property
+            baseTableSchemaName: cms_hun
+            constraintName: fk_main_image_file_descriptor
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: file_descriptor
+            referencedTableSchemaName: public
+
+- changeSet:
+      id: Create [fk_address_created_by_x_user_id] fk constraint
+      author: Máté Simon
+      changes:
+      - addForeignKeyConstraint:
+            baseColumnNames: created_by
+            baseTableName: address
+            baseTableSchemaName: cms_hun
+            constraintName: fk_address_created_by_x_user_id
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: user
+            referencedTableSchemaName: public
+
+- changeSet:
+      id: Create [fk_address_modified_by_x_user_id] fk constraint
+      author: Máté Simon
+      changes:
+      - addForeignKeyConstraint:
+            baseColumnNames: modified_by
+            baseTableName: address
+            baseTableSchemaName: cms_hun
+            constraintName: fk_address_modified_by_x_user_id
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: user
+            referencedTableSchemaName: public
+
+- changeSet:
+    id: Add [fk_message_sender_user_id_x_user_id] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: sender_user_id
+        baseTableName: message
+        baseTableSchemaName: cms_hun
+        constraintName: fk_message_sender_user_id_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+        referencedTableSchemaName: public
+
+- changeSet:
+    id: Add [fk_message_recipient_user_id_x_user_id] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: recipient_user_id
+        baseTableName: message
+        baseTableSchemaName: cms_hun
+        constraintName: fk_message_recipient_user_id_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+        referencedTableSchemaName: public
+
+- changeSet:
+    id: Create [fk_message_created_by_user_id_x_user_id] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: created_by
+        baseTableName: message
+        baseTableSchemaName: cms_hun
+        constraintName: fk_message_created_by_user_id_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+        referencedTableSchemaName: public
+
+- changeSet:
+    id: Create [fk_message_modified_by_user_id_x_user_id] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: modified_by
+        baseTableName: message
+        baseTableSchemaName: cms_hun
+        constraintName: fk_message_modified_by_user_id_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+        referencedTableSchemaName: public
+
+- changeSet:
+    id: Create [fk_property_id_x_property_x_file_descriptor_property_id] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: property_id
+        baseTableName: property_x_file_descriptor
+        baseTableSchemaName: cms_hun
+        constraintName: fk_property_id_x_property_x_file_descriptor_property_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: property
+        referencedTableSchemaName: cms_hun
+
+- changeSet:
+    id: Create [fk_file_descriptor_id_x_property_x_file_descriptor_property_id] fk constraint
+    author: Tivadar Bocz
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: file_descriptor_id
+        baseTableName: property_x_file_descriptor
+        baseTableSchemaName: cms_hun
+        constraintName: fk_file_descriptor_id_x_property_x_file_descriptor_property_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: file_descriptor
+        referencedTableSchemaName: public
+
+- changeSet:
+      id: Create [fk_room_x_code_store_item_id] fk constraint
+      author: Máté Simon
+      changes:
+      - addForeignKeyConstraint:
+            baseColumnNames: room
+            baseTableName: property
+            baseTableSchemaName: cms_hun
+            constraintName: fk_room_x_code_store_item_id
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: code_store_item
+            referencedTableSchemaName: public
+
+
+- changeSet:
+    id: Create [fk_room_ad_created_by_x_user_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: created_by
+        baseTableName: room_ad
+        baseTableSchemaName: cms_hun
+        constraintName: fk_room_ad_created_by_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+        referencedTableSchemaName: public
+
+- changeSet:
+    id: Create [fk_room_ad_modified_by_x_user_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: modified_by
+        baseTableName: room_ad
+        baseTableSchemaName: cms_hun
+        constraintName: fk_room_ad_modified_by_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+        referencedTableSchemaName: public
+
+- changeSet:
+    id: Create [fk_room_ad_property_id_x_property_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: property_id
+        baseTableName: room_ad
+        baseTableSchemaName: cms_hun
+        constraintName: fk_room_ad_property_id_x_property_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: property
+        referencedTableSchemaName: cms_hun
+
+- changeSet:
+    id: Create [fk_flatmate_ad_created_by_x_user_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: created_by
+        baseTableName: flatmate_ad
+        baseTableSchemaName: cms_hun
+        constraintName: fk_flatmate_ad_created_by_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+        referencedTableSchemaName: public
+
+- changeSet:
+    id: Create [fk_flatmate_ad_modified_by_x_user_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: modified_by
+        baseTableName: flatmate_ad
+        baseTableSchemaName: cms_hun
+        constraintName: fk_flatmate_ad_modified_by_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+        referencedTableSchemaName: public
+
+- changeSet:
+    id: Create [fk_flatmate_ad_user_id_x_user_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: flatmate_ad
+        baseTableSchemaName: cms_hun
+        constraintName: fk_flatmate_ad_user_id_x_user_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+        referencedTableSchemaName: public
+
+- changeSet:
+    id: Create [fk_termoflease_x_code_store_item_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: termoflease
+        baseTableName: property
+        baseTableSchemaName: cms_hun
+        constraintName: fk_termoflease_x_code_store_item_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: code_store_item
+        referencedTableSchemaName: public
+
+- changeSet:
+    id: Create [fk_flatmate_term_of_lease_x_code_store_item_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: term_of_lease
+        baseTableName: flatmate_ad
+        baseTableSchemaName: cms_hun
+        constraintName: fk_flatmate_term_of_lease_x_code_store_item_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: code_store_item
+        referencedTableSchemaName: public
+
+- changeSet:
+    id: Create [fk_flatmate_currency_x_code_store_item_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: currency
+        baseTableName: flatmate_ad
+        baseTableSchemaName: cms_hun
+        constraintName: fk_flatmate_currency_x_code_store_item_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: code_store_item
+        referencedTableSchemaName: public
+
+- changeSet:
+    id: Create [fk_ad_flatmate_ad_language_x_code_store_item_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: flatmate_ad_id
+        baseTableName: flatmate_ad_language_x_code_store_item
+        baseTableSchemaName: cms_hun
+        constraintName: fk_ad_flatmate_ad_language_x_code_store_item_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: flatmate_ad
+        referencedTableSchemaName: cms_hun
+
+- changeSet:
+    id: Create [fk_code_store_item_flatmate_ad_language_x_code_store_item_id] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: code_store_item_id
+        baseTableName: flatmate_ad_language_x_code_store_item
+        baseTableSchemaName: cms_hun
+        constraintName: fk_code_store_item_flatmate_ad_language_x_code_store_item_id
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: code_store_item
+        referencedTableSchemaName: public
+
+- changeSet:
+    id: Create [fk_user_detail_code_store_item_x_code_store_item] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: code_store_item_id
+        baseTableName: user_detail_x_language
+        baseTableSchemaName: cms_hun
+        constraintName: fk_user_detail_code_store_item_x_code_store_item
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: code_store_item
+        referencedTableSchemaName: public
+
+- changeSet:
+    id: Create [fk_user_detail_id_x_user_detail] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_detail_id
+        baseTableName: user_detail_x_language
+        baseTableSchemaName: cms_hun
+        constraintName: fk_user_detail_id_x_user_detail
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user_detail
+        referencedTableSchemaName: cms_hun
+
+- changeSet:
+    id: Create [fk_code_store_item_x_user_detail_occupation] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: occupation_id
+        baseTableName: user_detail
+        baseTableSchemaName: cms_hun
+        constraintName: fk_code_store_item_x_user_detail_occupation
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: code_store_item
+        referencedTableSchemaName: public
+
+- changeSet:
+    id: Create [fk_rent_period_x_property_x_property] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: property_id
+        baseTableName: rent_period_x_property
+        baseTableSchemaName: cms_hun
+        constraintName: fk_rent_period_x_property_x_property
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: property
+        referencedTableSchemaName: cms_hun
+
+- changeSet:
+    id: Create [fk_rent_period_x_property_x_code_store_item] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: code_store_item_id
+        baseTableName: rent_period_x_property
+        baseTableSchemaName: cms_hun
+        constraintName: fk_rent_period_x_property_x_code_store_item
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: code_store_item
+        referencedTableSchemaName: public
+
+- changeSet:
+    id: Create [fk_rent_period_x_flatmate_ad_x_flatmate_ad] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: flatmate_ad_id
+        baseTableName: rent_period_x_flatmate_ad
+        baseTableSchemaName: cms_hun
+        constraintName: fk_rent_period_x_flatmate_ad_x_flatmate_ad
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: flatmate_ad
+        referencedTableSchemaName: cms_hun
+
+- changeSet:
+    id: Create [fk_rent_period_x_flatmate_ad_x_code_store_item] fk constraint
+    author: Máté Simon
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: code_store_item_id
+        baseTableName: rent_period_x_flatmate_ad
+        baseTableSchemaName: cms_hun
+        constraintName: fk_rent_period_x_flatmate_ad_x_code_store_item
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: code_store_item
+        referencedTableSchemaName: public

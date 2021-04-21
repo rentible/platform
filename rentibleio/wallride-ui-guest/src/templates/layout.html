@@ -1,0 +1,309 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.sprinfgramework.org/schema/security"
+      th:lang="${#locale.language}">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title th:text="${WEBSITE_TITLE}">Title</title>
+    <!--/*/ <th:block th:fragment="head-link"> /*/-->
+    <link rel="alternate" type="application/atom+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/atom.xml}"/>
+    <link rel="alternate" type="application/rss+xml" th:title="${WEBSITE_TITLE}" th:href="@{/feed/rss.xml}"/>
+    <link rel="stylesheet" th:href="@{/resources/bundle.css}" href="/resources/guest/bundle.css"/>
+    <link rel="stylesheet" th:href="@{//use.fontawesome.com/releases/v5.7.2/css/all.css}"
+          href="//use.fontawesome.com/releases/v5.7.2/css/all.css"/>
+    <link rel="stylesheet" th:href="@{//cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.css}">
+    <link rel="stylesheet"
+          th:href="@{//cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/default-skin/default-skin.min.css}">
+    <script th:src="@{//cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.js}"
+            src="//cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.js"></script>
+    <script th:src="@{//cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js}"
+            src="//cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+    <script th:src="@{//code.jquery.com/jquery-1.11.1.min.js}" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script th:src="@{//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js}"
+            src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+    <!-- <script th:src="@{//code.jquery.com/jquery-1.11.1.min.js}" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script th:src="@{//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js}" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script> -->
+    <!--/*/ </th:block> /*/-->
+    <!--/*/ <th:block th:fragment="head-script"> /*/-->
+    <script th:src="@{/resources/bundle.js}" src="/resources/guest/bundle.js"></script>
+    <!--/*/ </th:block> /*/-->
+    <script th:replace="google-analytics::ga(null)"></script>
+</head>
+<body>
+<!-- Wrap all page content here -->
+<div id="wrap">
+    <!-- Fixed navbar -->
+    <div th:fragment="nav" class="navbar navbar-default navbar-fixed-top col-sm-8 col-sm-offset-2" role="navigation">
+        <div class="container pl-0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a th:href="@{/}" class="navbar-brand" href="/">
+                    <img th:src="@{../../resources/img/flatshares-logo.png}">
+                </a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li th:each="node : ${#pages.nodes}" th:classappend="${node.contains(page) ? 'active' : ''}"><a
+                            th:href="@{/__${node.object.code}__}" th:text="${node.object.title}">About</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span th:text="${#messages.msg('Language.' + #locale.language)}">Language</span> <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li th:each="key : ${LANGUAGE_LINKS.keySet()}"><a th:href="${LANGUAGE_LINKS.get(key)}" th:text="${#messages.msg('Language.' + key)}" href="#">English</a></li>
+                        </ul>
+                    </li> -->
+
+                    <!-- Messages -->
+                    <!-- <li th:if="${#authorization.expression('hasAnyAuthority(''unactivated_lodger'',''lodger'',''admin'')')}">
+                        <a aria-hidden="true"><i class="fas fa-envelope"></i></a></li> -->
+
+                    <!-- Property -->
+                    <li sec:authorize="hasAnyAuthority('unactivated_lodger','lodger','admin')"><a
+                            th:classappend="${roomsMenuActive}? active-menu-item" th:href="@{/property-list}"
+                            th:text="#{Rooms}"></a></li>
+
+                    <!-- Flatmate -->
+                    <li sec:authorize="hasAnyAuthority('unactivated_lodger','lodger','admin')"><a
+                            th:classappend="${flatmatesMenuActive}? active-menu-item" th:href="@{/flatmate-list}"
+                            th:text="#{Flatmates}"></a></li>
+
+                    <li sec:authorize="hasAnyAuthority('unactivated_lodger','lodger','admin')"><a
+                            th:classappend="${profileMenuActive}? active-menu-item" th:href="@{/settings/profile}"
+                            th:text="#{Profile}"></a></li>
+
+                    <li sec:authorize="hasAnyAuthority('unactivated_lodger','lodger','admin')"><a
+                            th:classappend="${postAdMenuActive}? active-menu-item" data-toggle="modal"
+                            data-target="#postAdModal"
+                            th:text="#{PostAd}"></a></li>
+
+                    <!-- Post ad -->
+                    <!-- <li class="dropdown" sec:authorize="hasAnyAuthority('unactivated_lodger','lodger','admin')">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" th:text="#{PostYourAd}">Post Ad</a>
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/room-ad}"><span><i class="fas fa-bed header-fa-icon"></i></span> <span th:text="#{PostRoomAd}">PostRoomAd</span></a></li>
+                            <li><a th:href="@{/flatmate-ad}"><span><i class="fas fa-male header-fa-icon"></i></span> <span th:text="#{PostFlatmateAd}">PostFlatmateAd</span></a></li>
+                        </ul>
+                    </li> -->
+
+                    <!-- Settings + Logout dropdown-->
+                    <!-- <li class="dropdown" sec:authorize="hasAnyAuthority('unactivated_lodger','lodger','admin')">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
+                                sec:authentication="principal.username">User Name</span>
+                            <img th:src="${PROFILE_PIC_PATH}" alt="Avatar" class="header-img"></a>
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/settings/profile}"><i class="fas fa-edit header-fa-icon"></i> <span th:text="#{EditProfile}">Edit Profile</span></a></li>
+                            <li th:if="${!#authorization.expression('hasAnyAuthority(''facebook_user'')')}"><a th:href="@{/settings/password}"><i class="fas fa-unlock-alt header-fa-icon"></i> <span th:text="#{EditPassword}">Edit Password</span></a></li>
+                            <li><a th:href="@{/logout}"><i class="fas fa-sign-out-alt header-fa-icon"></i> <span th:text="#{LogOut}">Log Out</span></a></li>
+                        </ul>
+                    </li> -->
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
+
+    <div th:fragment="postAd" class="modal fade" id="postAdModal" tabindex="-1" role="dialog"
+         aria-labelledby="postAdModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" th:text="#{ChooseYourAdType}" id="postAdModalLabel"></h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-sm-5">
+                        <a class="default-flatshares-btn-white text-deco-none p-0 mt--12 py-0 px-10"
+                           th:href="@{/room-ad}"
+                           th:text=#{HaveRoomToRent}></a>
+                    </div>
+                    <div class="col-sm-2">
+                        <span th:text="#{Or}"></span>
+                    </div>
+                    <div class="col-sm-5 p-0">
+                        <a class="default-flatshares-btn-white text-deco-none p-0 mt--12 py-0 px-10"
+                           th:href="@{/flatmate-ad}"
+                           th:text=#{LookingForRoom}></a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <h3 th:text=#{HowCanICreateMyAd}></h3>
+                    <div class="col-sm-4">
+                        <p class="border-round">1</p>
+                        <div>
+                            <p th:text="#{SelectYourAdType}"></p>
+                            <p th:text="#{SelectYourAdTypeDescription}"></p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <p class="border-round">2</p>
+                        <div>
+                            <p th:text="#{MakeTheListingInteractive}"></p>
+                            <p th:text="#{MakeTheListingInteractiveDescription}"></p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <p class="border-round">3</p>
+                        <div>
+                            <p th:text="#{SelectYourAdType}"></p>
+                            <p th:text="#{GetYourMatches}"></p>
+                        </div>
+                    </div>
+                    <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:fragment="profile" class=".m-t-15">
+        <div class="profile-edit-list-item main-list-item" data-toggle="collapse" data-target="#chooseAdExpandMenu"
+             aria-expanded="false" aria-controls="chooseAdExpandMenu">
+            <i class="fas fa-plus-circle property-card-item-icon header-fa-icon"></i>
+            <a><span class="flatshares-font" th:text="#{PostNewAd}"></span></a>
+        </div>
+        <!-- Choose ad type expand menu -->
+        <ul id="chooseAdExpandMenu" class="collapse tab-inner list-unstyled">
+            <li class="profile-edit-list-item">
+                <i class="fas fa-bed header-fa-icon property-card-item-icon header-fa-icon"></i>
+                <a th:href="@{/room-ad}"><span class="flatshares-font" th:text="#{PostRoomAd}">PostRoomAd</span></a>
+            </li>
+            <li class="profile-edit-list-item">
+                <i class="fas fa-male header-fa-icon property-card-item-icon header-fa-icon"></i>
+                <a th:href="@{/flatmate-ad}"><span class="flatshares-font"
+                                                   th:text="#{PostFlatmateAd}">PostFlatmateAd</span></a>
+            </li>
+        </ul>
+        <!-- End of Choose ad type expand menu -->
+
+        <div class="profile-edit-list-item main-list-item" data-toggle="collapse" data-target="#myAdsExpandMenu"
+             aria-expanded="false" aria-controls="myAdsExpandMenu">
+            <i class="fas fa-file-invoice property-card-item-icon header-fa-icon"></i>
+            <a><span class="flatshares-font" th:text="#{MyAds}"></span></a>
+        </div>
+
+        <!-- My ads expand menu -->
+        <ul id="myAdsExpandMenu" class="collapse tab-inner list-unstyled">
+            <li class="profile-edit-list-item">
+                <i class="fas fa-bed header-fa-icon property-card-item-icon header-fa-icon"></i>
+                <a th:href="@{/settings/profile/my-room-ads}"><span class="flatshares-font"
+                                                                    th:text="#{MyRoomAds}"></span></a>
+            </li>
+            <li class="profile-edit-list-item">
+                <i class="fas fa-male header-fa-icon property-card-item-icon header-fa-icon"></i>
+                <a th:href="@{/settings/profile/my-flatmate-ads}"><span class="flatshares-font"
+                                                                        th:text="#{MyFlatmateAds}"></span></a>
+            </li>
+        </ul>
+        <!-- End of My ads expand menu -->
+
+        <div class="profile-edit-list-item main-list-item">
+            <i class="fas fa-comment property-card-item-icon header-fa-icon"></i>
+            <a><span class="flatshares-font" th:text="#{MyMessages}"></span></a>
+        </div>
+        <div class="profile-edit-list-item profile-edit-list-flex-item main-list-item" data-toggle="collapse"
+             data-target="#rentalDashboard" aria-expanded="false" aria-controls="rentalDashboard">
+            <i class="fas fa-indent property-card-item-icon header-fa-icon"></i>
+            <a><span class="flatshares-font" th:text="#{RentalDashboard}"></span></a>
+        </div>
+        <!-- Rental dashboard expand menu -->
+        <ul id="rentalDashboard" class="collapse tab-inner list-unstyled">
+            <li class="profile-edit-list-item" data-toggle="collapse" data-target="#agreements" aria-expanded="false"
+                aria-controls="agreements">
+                <div>
+                    <i class="fas fa-angle-right property-card-item-icon header-fa-icon"></i>
+                    <a><span class="flatshares-font" th:text="#{Agreements}"></span></a>
+                </div>
+            </li>
+
+            <!-- Agreements expand menu -->
+            <li id="agreements" class="collapse tab-inner mb-10">
+                <ul class="list-unstyled">
+                    <li class="profile-edit-list-item">
+                        <a><span class="flatshares-font" th:text="#{Enquiries}"></span></a>
+                    </li>
+                    <li class="profile-edit-list-item">
+                        <a><span class="flatshares-font" th:text="#{Rental}"></span></a>
+                    </li>
+                    <li class="profile-edit-list-item">
+                        <a><span class="flatshares-font" th:text="#{Deposit}"></span></a>
+                    </li>
+                </ul>
+            </li>
+            <!-- End of Agreements expand menu -->
+
+            <li class="profile-edit-list-item" data-toggle="collapse" data-target="#paymentsAndTransferRecords"
+                aria-expanded="false" aria-controls="paymentsAndTransferRecords">
+                <div class="profile-edit-list-flex-item">
+                    <i class="fas fa-angle-right property-card-item-icon header-fa-icon"></i>
+                    <a><span class="flatshares-font" th:text="#{PaymentsAndTransferRecords}"></span></a>
+                </div>
+            </li>
+
+            <!-- payments And Transfer Records expand menu -->
+            <li id="paymentsAndTransferRecords" class="collapse tab-inner .mb-10">
+                <ul class="list-unstyled">
+                    <li class="profile-edit-list-item">
+                        <a><span class="flatshares-font" th:text="#{Utilities}"></span></a>
+                    </li>
+                    <li class="profile-edit-list-item">
+                        <div class="profile-edit-list-flex-item">
+                            <a><span class="flatshares-font" th:text="#{OngoingRentalAgreements}"></span></a>
+                        </div>
+                    </li>
+                    <li class="profile-edit-list-item">
+                        <div class="profile-edit-list-flex-item">
+                            <a><span class="flatshares-font" th:text="#{PreviousRentalAgreements}"></span></a>
+                        </div>
+                    </li>
+                    <li class="profile-edit-list-item">
+                        <a><span class="flatshares-font" th:text="#{Disputes}"></span></a>
+                    </li>
+                </ul>
+            </li>
+            <!-- End of  payments And Transfer Records expand menu -->
+        </ul>
+        <!-- End of Rental dashboard expand menu -->
+
+        <div class="profile-edit-list-item main-list-item">
+            <i class="fas fa-users property-card-item-icon header-fa-icon"></i>
+            <a th:href="@{/settings/profile/membership}"><span class="flatshares-font"
+                                                               th:text="#{Membership}"></span></a>
+        </div>
+        <div class="profile-edit-list-item main-list-item mb-15">
+            <i class="fas fa-user property-card-item-icon header-fa-icon"></i>
+            <a th:href="@{/settings/profile}"><span class="flatshares-font" th:text="#{Profile}"></span></a>
+        </div>
+    </div>
+
+    <!-- Begin page content -->
+    <div class="container">
+        <div class="page-header">
+            <h1>WallRide</h1>
+        </div>
+        <p class="lead">
+            WallRide is a multilingual easy-to-customize open source CMS made by Java, using Spring Framework, Hibernate
+            and Thymeleaf.<br/>
+            WallRide focuses on sophisticated UI, simple and clean source code and easy deploy to AWS BeansTalk(of
+            course other servlet containers)<br/>
+            We hope this CMS is loved by many developers of principles all over the world.
+        </p>
+    </div>
+</div>
+<div th:fragment="footer" class="footer">
+    <div class="container">
+        <p class="text-muted credit">&copy; WallRide</p>
+    </div>
+</div>
+</body>
+</html>

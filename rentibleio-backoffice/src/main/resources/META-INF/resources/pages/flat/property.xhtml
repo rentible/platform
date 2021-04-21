@@ -1,0 +1,119 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="../template.xhtml">
+
+    <ui:define name="implementation">
+        <h:form>
+            <div class="property-box">
+                <h2>#{myFlatController.pageTitle}</h2>
+                <p:separator/>
+                <p:tabView>
+                    <p:tab title="Basic informations">
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:outputLabel for="rentalType" value="Rental Type:"/>
+                                <p:selectOneMenu id="rentalType" value="#{myFlatController.property.rentalType}" class="tab-input">
+                                    <f:selectItem itemLabel="Select rental type" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{myFlatController.rentalTypes}" var="rentalTypes" itemValue="#{rentalTypes.id}" itemLabel="#{rentalTypes.caption}"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel for="crossStreet1" value="Cross Street 1:"/>
+                                <p:inputText id="crossStreet1" value="#{myFlatController.property.crossStreet1}" class="tab-input" label="text"/>
+                                <p:outputLabel for="crossStreet2" value="Cross Street 2:"/>
+                                <p:inputText id="crossStreet2" value="#{myFlatController.property.crossStreet2}" class="tab-input" label="text"/>
+                                <p:outputLabel for="apartmentSize" value="Size:"/>
+                                <p:inputText id="apartmentSize" value="#{myFlatController.property.apartmentSize}" class="tab-input" label="text"/>
+                                <p:outputLabel for="rentPrice" value="Rental:"/>
+                                <p:inputText id="rentPrice" value="#{myFlatController.property.rentPrice}" class="tab-input" label="text"/>
+                                <p:outputLabel for="rentPriceCurrency" value="Rental Price Currency:"/>
+                                <p:selectOneMenu id="rentPriceCurrency" value="#{myFlatController.property.rentPriceCurrency}" class="tab-input">
+                                    <f:selectItem itemLabel="Select currency" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{myFlatController.currencies}" var="currency" itemValue="#{currency.id}" itemLabel="#{currency.caption}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="Details">
+                        <h:panelGrid style="float: left;" columns="2" cellpadding="5">
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:outputLabel for="room" value="Rooms:"/>
+                                <p:inputText id="room" value="#{myFlatController.property.room}" class="tab-input" label="text"/>
+                                <p:outputLabel for="deposit" value="Deposit:"/>
+                                <p:inputText id="deposit" value="#{myFlatController.property.deposit}" class="tab-input" label="text"/>
+                                <p:outputLabel for="commonCost" value="Common Cost:"/>
+                                <p:inputText id="commonCost" value="#{myFlatController.property.commonCost}" class="tab-input" label="text"/>
+                                <p:outputLabel for="furnished" value="Furnished:"/>
+                                <p:selectBooleanCheckbox id="furnished" value="#{myFlatController.property.furnished}" class="tab-input"/>
+                                <p:outputLabel for="apartmentCondition" value="Apartment Condition:"/>
+                                <p:selectOneMenu id="apartmentCondition" value="#{myFlatController.property.apartmentCondition}" class="tab-input">
+                                    <f:selectItem itemLabel="Select condition" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="" var="" itemValue="" itemLabel=""/>
+                                </p:selectOneMenu>
+                                <p:outputLabel for="buildingCondition" value="Building Condition:"/>
+                                <p:selectOneMenu id="buildingCondition" value="#{myFlatController.property.buildingCondition}" class="tab-input">
+                                    <f:selectItem itemLabel="Select condition" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{myFlatController.buildingConditions}" var="conditions" itemValue="#{conditions.id}" itemLabel="#{conditions.caption}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid style="float: left; margin-left: 50px;" columns="2" cellpadding="5">
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:outputLabel for="view" value="View:"/>
+                                <p:selectOneMenu id="view" value="#{myFlatController.property.view}" class="tab-input">
+                                    <f:selectItem itemLabel="Select view type" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{myFlatController.viewTypes}" var="viewType" itemValue="#{viewType.id}" itemLabel="#{viewType.caption}"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel for="floor" value="Floor:"/>
+                                <p:inputText id="floor" value="#{myFlatController.property.floor}" class="tab-input" label="text"/>
+                                <p:outputLabel for="heating" value="Heating:"/>
+                                <p:selectOneMenu id="heating" value="#{myFlatController.property.heating}" class="tab-input">
+                                    <f:selectItem itemLabel="Select heating type" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{myFlatController.heatingTypes}" var="heatingType" itemValue="#{heatingType.id}" itemLabel="#{heatingType.caption}"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel for="elevator" value="Elevator:"/>
+                                <p:selectBooleanCheckbox id="elevator" value="#{myFlatController.property.elevator}" class="tab-input"/>
+                                <p:outputLabel for="nearToMetro" value="Near to metro:"/>
+                                <p:inputText id="nearToMetro" value="#{myFlatController.property.nearToMetro}" class="tab-input" label="text"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="Informations">
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:outputLabel for="availableFrom" value="Available From:"/>
+                                <p:calendar id="availableFrom" value="#{myFlatController.property.availableFrom}" class="tab-input" required="true" showOn="button">
+                                    <f:convertDateTime pattern="MM/dd/yyyy"/>
+                                    <f:converter converterId="timestampConverter"/>
+                                </p:calendar>
+                                <h:inputHidden value="#{myFlatController.property.id}"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:tab>
+                </p:tabView>
+            </div>
+            <div class="property-box">
+                <p:commandButton id="saveEditBtn"
+                                 style="margin-top: 20px;"
+                                 value="Save changes"
+                                 action="#{myFlatController.edit()}"
+                                 styleClass="btn-primary"
+                                 rendered="#{myFlatController.property.id != null}"/>
+
+                <p:commandButton id="saveBtn"
+                                 style="margin-top: 20px;"
+                                 value="Save"
+                                 action="#{myFlatController.save()}"
+                                 styleClass="btn-primary"
+                                 rendered="#{myFlatController.property.id == null}"/>
+                <a class="admin-faces-button btn-default"
+                   style="margin-top: 20px;"
+                   href="/pages/myflat">
+                    Cancel
+                </a>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

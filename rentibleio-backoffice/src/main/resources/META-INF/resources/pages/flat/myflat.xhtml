@@ -1,0 +1,93 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="../template.xhtml">
+
+    <ui:define name="implementation">
+        <div class="content-page">
+            <p:outputLabel for="country" value="Country: " />
+            <div style="display: flex">
+                <p:selectOneMenu id="country" value="#{myFlatController.selectedCountry}" style="width:150px">
+                    <p:ajax listener="#{myFlatController.onSelectedCountryChange}"/>
+                    <f:selectItem itemLabel="Select Country" itemValue="" noSelectionOption="true"/>
+                    <f:selectItems value="#{myFlatController.availableCountries}"/>
+                </p:selectOneMenu>
+
+                <p:button style="margin-left: 20px;" href="/pages/myflat/new" styleClass="btn-primary fa fa-plus" value="Add New Property"/>
+            </div>
+
+            <p:separator />
+            <h:form id="form">
+                <p:dataGrid var="property" value="#{propertyPaginator.model}"
+                            columns="3"
+                            layout="grid"
+                            rows="6"
+                            paginator="true"
+                            id="property"
+                            lazy="true"
+                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            rowsPerPageTemplate="6,9,12">
+
+                    <f:facet name="header">
+                        Flats for rent
+                    </f:facet>
+
+                    <p:panel header="#{property.crossStreet1}" style="text-align:center">
+                        <div>
+                            <h:panelGrid columns="1" style="width:100%">
+                                <h:graphicImage url="#{request.contextPath}/public/media/#{property.mainImageObject.filePath}" height="100px" width="100px"/>
+                                <h:outputText value="Size: #{property.apartmentSize} m2"/>
+                                <h:outputText value="Rooms: #{property.room}" rendered="#{!empty property.room}"/>
+                                <h:outputText value="Price: #{property.rentPrice}"/>
+
+                            </h:panelGrid>
+                        </div>
+                        <div>
+                            <p:button href="/pages/myflat/edit/#{property.id}" styleClass="btn-info fa fa-edit" value="Edit"/>
+                            <a onclick="openDeleteConfirmation(#{property.id})" class="btn-danger fa fa-trash admin-faces-button"><span class="btn-text">Delete</span></a>
+                        </div>
+                    </p:panel>
+
+
+                </p:dataGrid>
+
+                <p:dialog header="Confirmation" widgetVar="deleteConfirm" minHeight="40">
+                    <div style="width: 100%; text-align: center">
+                        <h:outputText value="Are you sure?"/>
+                    </div>
+                    <h:inputHidden id="deleteId" value="#{myFlatController.deleteId}"/>
+                    <div style="width: 100%; text-align: center; margin-top: 20px;">
+                        <h:commandButton
+                                value="Yes"
+                                style="margin-right: 10px;"
+                                styleClass="btn btn-danger"
+                                action="#{propertyService.delete(userService.getMySchema(), myFlatController.deleteId)}"/>
+                        <h:commandButton
+                                value="No"
+                                style="margin-left: 10px;"
+                                styleClass="btn btn-default"
+                                onclick="closeDeleteConfirmation()">
+                        </h:commandButton>
+                    </div>
+                </p:dialog>
+
+            </h:form>
+
+        </div>
+        <script type="text/javascript">
+
+            function openDeleteConfirmation(value) {
+                PF('deleteConfirm').show();
+                document.getElementById("form:deleteId").value = value;
+            }
+
+            function closeDeleteConfirmation() {
+                PF('deleteConfirm').hide();
+            }
+
+        </script>
+    </ui:define>
+
+</ui:composition>

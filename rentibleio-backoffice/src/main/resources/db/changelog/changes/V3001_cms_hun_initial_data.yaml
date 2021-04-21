@@ -1,0 +1,13 @@
+databaseChangeLog:
+- preConditions:
+  - runningAs:
+      username: postgres
+
+- changeSet:
+    id: Default [user_detail] data
+    author: Tivadar Bocz
+    changes:
+    - sql:
+      sql: INSERT INTO cms_hun.user_detail (user_id, first_name, last_name) VALUES (1, 'János', 'Teszt')
+    - sql:
+      sql: INSERT INTO cms_hun.user_detail (user_id, first_name, last_name) VALUES (2, 'Krisztina', 'Teszt')

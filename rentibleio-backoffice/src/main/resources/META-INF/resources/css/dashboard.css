@@ -1,0 +1,144 @@
+.balance-box{
+    height: 80%;
+    margin: 2% 2%;
+    width: 35%;
+    float: left;
+    background-color: #fea821;
+    border-radius: 5px;
+}
+
+.balance-box-top-content{
+    width: 100%;
+    text-align: center;
+    margin-top: 20%;
+}
+
+.balance-box-top-content-item{
+    color: white;
+}
+
+.balance-box-separator{
+    border-color: white;
+    border-top: 1px;
+    width: 80%;
+    margin-top: 20%;
+}
+
+.currency-button-box{
+    width: 100%;
+    float: left;
+    text-align: center;
+    margin-top: 4%;
+}
+
+.currency-button{
+    width: 55%;
+    height: 60px;
+    line-height: 60px;
+    text-decoration: none;
+    border-radius: 5px;
+    color: black;
+    background-color: white;
+    text-align: center;
+    letter-spacing: .5px;
+    transition: .2s ease-out;
+    cursor: pointer;
+    border: none;
+    display: inline-block;
+    outline: 0;
+    padding: 0 2rem;
+    text-transform: uppercase;
+    vertical-align: middle;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.wire-transfer-box{
+    width: 100%;
+    float: left;
+    text-align: center;
+    margin-top: 4%;
+}
+
+.wire-transfer-button{
+    width: 55%;
+    height: 60px;
+    line-height: 60px;
+    text-decoration: none;
+    border-radius: 5px;
+    color: black;
+    background-color: white;
+    text-align: center;
+    letter-spacing: .5px;
+    transition: .2s ease-out;
+    cursor: pointer;
+    border: none;
+    display: inline-block;
+    outline: 0;
+    padding: 0 2rem;
+    text-transform: uppercase;
+    vertical-align: middle;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.changelly-box{
+    width: 100%;
+    float: left;
+    text-align: center;
+    margin-top: 4%;
+}
+
+.changelly-button{
+    width: 50%;
+    height: 60px;
+    line-height: 60px;
+    text-decoration: none;
+    border-radius: 5px;
+    color: black;
+    background-color: white;
+    text-align: center;
+    letter-spacing: .5px;
+    transition: .2s ease-out;
+    cursor: pointer;
+    border: none;
+    display: inline-block;
+    outline: 0;
+    padding: 0 2rem;
+    text-transform: uppercase;
+    vertical-align: middle;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.ico-detail-box{
+    height: 36%;
+    margin: 2% 2%;
+    width: 55%;
+    float: left;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 5px 5px 10px 5px silver;
+}
+
+.ico-detail-box-title{
+    padding: 0 0 0 20px;
+    margin-top: 20px!important;
+}
+
+.token-price-box{
+    height: 36%;
+    margin: 2% 2%;
+    width: 55%;
+    float: left;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 5px 5px 10px 5px silver;
+}
+
+.token-price-box-title{
+    padding: 0 0 0 20px;
+    margin-top: 20px!important;
+}
+
+.title-separator{
+    border-color: silver;
+    border-top: 1px;
+}

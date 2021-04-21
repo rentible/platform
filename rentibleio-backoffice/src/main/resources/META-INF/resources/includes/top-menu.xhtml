@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <h:form>
+        <ul class="nav navbar-nav">
+            <li class="dropdown messages-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                    <i class="fa fa-envelope-o"></i>
+                    <span class="label label-success">4</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="header align-center">You have 4 messages</li>
+                    <li>
+                        <ul class="menu">
+                            <li>
+                                Message 1
+                            </li>
+                            <li>
+                                Message 2
+                            </li>
+                            <li>
+                                Message 3
+                            </li>
+                            <li>
+                                Message 4
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="footer"><a href="#">See all messages</a></li>
+                </ul>
+            </li>
+            <li class="dropdown notifications-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                    <i class="fa fa-bell-o"></i>
+                    <span class="label label-warning">2</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="header align-center">You have 2 notifications.</li>
+                    <li>
+                        <!-- inner menu: contains the actual data -->
+                        <ul class="menu">
+                            <li>
+                                Notification 1
+                            </li>
+
+                            <li>
+                                Notification 2
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="footer"><a href="#">See all notifications</a></li>
+                </ul>
+            </li>
+            <li class="dropdown user user-menu">
+                <a href="/pages/profile">
+                    <span class="hidden-xs">#{userService.getMyUsername()}</span>
+                </a>
+            </li>
+            <li class="dropdown user user-menu">
+
+                <p:commandLink id="nonAjax" action="#{authController.logOut()}" ajax="false">
+                    <i class="fa fa-sign-out"></i>
+                </p:commandLink>
+
+                <!--<a href="/pages/logout">-->
+                <!--<i class="fa fa-gears"></i>-->
+                <!--</a>-->
+            </li>
+
+        </ul>
+    </h:form>
+
+</ui:composition>
